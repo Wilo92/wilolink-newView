@@ -1,0 +1,8 @@
+<svg width="600" height="180" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="90" r="9" fill="#F5820C"/>
+  <circle cx="80" cy="65" r="9" fill="#F5820C"/>
+  <circle cx="80" cy="115" r="9" fill="#F5820C"/>
+  <line x1="50" y1="90" x2="80" y2="65" stroke="#F5820C" stroke-width="4"/>
+  <line x1="50" y1="90" x2="80" y2="115" stroke="#F5820C" stroke-width="4"/>
+  <text x="112" y="105" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="600" fill="#FFFFFF">wilo<tspan fill="#F5820C" font-weight="700">link</tspan></text>
+</svg>
