@@ -46,8 +46,27 @@ function buildNodes(w: number, h: number): Node[] {
   return nodes;
 }
 
+// ============================================================
+// PRUEBA TEMPORAL DE AISLAMIENTO — en true, apaga TODO el canvas
+// animado (cero rAF, cero dibujo) para confirmar si esto es o no
+// la causa de la lentitud. Bórralo cuando terminemos de diagnosticar.
+// ============================================================
+const DISABLE_HERO_ANIMATION = true;
+
 function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
   useEffect(() => {
+    if (DISABLE_HERO_ANIMATION) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const parent = canvas.parentElement!;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+      ctx.fillStyle = "#0a0e1a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
 

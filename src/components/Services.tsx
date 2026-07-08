@@ -29,8 +29,20 @@ const SERVICES = [
   },
 ] as const;
 
+const DISABLE_SERVICES_ANIMATION = true;
+
 function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
   useEffect(() => {
+    if (DISABLE_SERVICES_ANIMATION) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const parent = canvas.parentElement!;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+      return;
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
