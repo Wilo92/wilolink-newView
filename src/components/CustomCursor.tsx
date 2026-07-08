@@ -66,10 +66,14 @@ export default function CustomCursor() {
       mouse.y = e.clientY;
     }
 
+    const NORMAL_GLOW = `0 0 12px rgba(${COLOR_TEAL}, 0.4), 0 0 0 1px rgba(0,0,0,0.2)`;
+    const HOVER_GLOW = `0 0 18px rgba(${COLOR_TEAL}, 0.7), 0 0 0 1px rgba(0,0,0,0.2)`;
+
     function handlePointerOver(e: PointerEvent) {
       const target = e.target as HTMLElement;
       if (target.closest(HOVER_SELECTOR)) {
         isHovering = true;
+        ring!.style.boxShadow = HOVER_GLOW;
       }
     }
     function handlePointerOut(e: PointerEvent) {
@@ -77,6 +81,7 @@ export default function CustomCursor() {
       const related = e.relatedTarget as HTMLElement | null;
       if (target.closest(HOVER_SELECTOR) && !related?.closest(HOVER_SELECTOR)) {
         isHovering = false;
+        ring!.style.boxShadow = NORMAL_GLOW;
       }
     }
 
@@ -137,11 +142,6 @@ export default function CustomCursor() {
         scaleY * currentScale
       })`;
 
-      // brillo leve extra cuando está en hover, sin perder el contorno de contraste
-      const glowOpacity = 0.4 + (isHovering ? 0.3 : 0);
-      const glowBlur = isHovering ? 18 : 12;
-      ring!.style.boxShadow = `0 0 ${glowBlur}px rgba(${COLOR_TEAL}, ${glowOpacity}), 0 0 0 1px rgba(0,0,0,0.2)`;
-
       raf = requestAnimationFrame(tick);
     }
     raf = requestAnimationFrame(tick);
@@ -179,7 +179,8 @@ export default function CustomCursor() {
           width: RING_SIZE,
           height: RING_SIZE,
           border: `${RING_BORDER}px solid rgba(${COLOR_TEAL}, 0.8)`,
-          boxShadow: `0 0 0 1px rgba(0,0,0,0.2)`,
+          boxShadow: `0 0 12px rgba(${COLOR_TEAL}, 0.4), 0 0 0 1px rgba(0,0,0,0.2)`,
+          transition: "box-shadow 200ms ease",
           willChange: "transform",
         }}
       />
