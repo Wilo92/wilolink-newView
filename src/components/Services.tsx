@@ -43,6 +43,7 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
     let raf = 0;
     let w = 0;
     let h = 0;
+    let isVisible = true; // se actualiza con el IntersectionObserver de abajo
     let nodes: { x: number; y: number; vx: number; vy: number }[] = [];
 
     function resize() {
@@ -64,7 +65,22 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
       return () => window.removeEventListener("resize", resize);
     }
 
+    // Pausa el canvas por completo cuando el usuario ya hizo scroll más allá
+    // de esta sección — evita gastar CPU dibujando algo que nadie está viendo.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !raf) draw();
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     function draw() {
+      if (!isVisible) {
+        raf = 0;
+        return;
+      }
       ctx!.clearRect(0, 0, w, h);
       nodes.forEach((n) => {
         n.x += n.vx;
@@ -97,6 +113,7 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
 
     return () => {
       window.removeEventListener("resize", resize);
+      observer.disconnect();
       cancelAnimationFrame(raf);
     };
   }, [canvasRef]);
