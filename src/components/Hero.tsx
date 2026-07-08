@@ -64,6 +64,7 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     let raf = 0;
     let w = 0;
     let h = 0;
+    let isVisible = true;
     const mouse = { x: -9999, y: -9999, active: false };
     const MOUSE_RADIUS = 130;
 
@@ -78,6 +79,32 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     }
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mouseleave", handleLeave);
+
+    // --- Pre-renderiza el "brillo" de cada color UNA sola vez (sprite) ---
+    // en vez de llamar a createRadialGradient() por cada nodo, en cada frame.
+    // Esto es lo que se conoce como "sprite caching": lo caro (calcular el
+    // degradado) se hace una vez; en el loop de animación solo se copian
+    // píxeles ya calculados con drawImage, que es prácticamente gratis.
+    function makeGlowSprite(color: string, radius: number) {
+      const size = radius * 2;
+      const off = document.createElement("canvas");
+      off.width = size;
+      off.height = size;
+      const octx = off.getContext("2d")!;
+      const g = octx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+      g.addColorStop(0, color);
+      g.addColorStop(1, "transparent");
+      octx.fillStyle = g;
+      octx.fillRect(0, 0, size, size);
+      return off;
+    }
+    const glowSprites: Record<string, { normal: HTMLCanvasElement; hover: HTMLCanvasElement }> = {};
+    COLORS.forEach((c) => {
+      glowSprites[c] = {
+        normal: makeGlowSprite(c, 3 * 4), // radio máximo (r=3) * factor normal (4)
+        hover: makeGlowSprite(c, 3 * 7), // radio máximo (r=3) * factor hover (7)
+      };
+    });
 
     function resize() {
       const parent = canvas!.parentElement!;
@@ -105,7 +132,20 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       };
     }
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !raf) draw();
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     function draw() {
+      if (!isVisible) {
+        raf = 0;
+        return;
+      }
       ctx!.fillStyle = "#0a0e1a";
       ctx!.fillRect(0, 0, w, h);
       frame++;
@@ -173,13 +213,8 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         const distToMouse = mouse.active ? Math.hypot(n.x - mouse.x, n.y - mouse.y) : Infinity;
         const nearMouse = distToMouse < MOUSE_RADIUS;
         const glowR = n.r * (nearMouse ? 7 : 4);
-        const g = ctx!.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
-        g.addColorStop(0, n.c);
-        g.addColorStop(1, "transparent");
-        ctx!.fillStyle = g;
-        ctx!.beginPath();
-        ctx!.arc(n.x, n.y, glowR, 0, 7);
-        ctx!.fill();
+        const sprite = nearMouse ? glowSprites[n.c].hover : glowSprites[n.c].normal;
+        ctx!.drawImage(sprite, n.x - glowR, n.y - glowR, glowR * 2, glowR * 2);
         ctx!.fillStyle = n.c;
         ctx!.beginPath();
         ctx!.arc(n.x, n.y, nearMouse ? n.r * 1.6 : n.r, 0, 7);
@@ -213,6 +248,7 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       window.removeEventListener("resize", resize);
       canvas!.removeEventListener("mousemove", handleMove);
       canvas!.removeEventListener("mouseleave", handleLeave);
+      observer.disconnect();
       cancelAnimationFrame(raf);
     };
   }, [canvasRef]);
