@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // TODO: cuando conectes el contador de visitas real, reemplaza este número
 // por el valor que traigas de tu API/base de datos.
@@ -62,39 +62,6 @@ function useBootTyping(lines: Line[]) {
 
 export default function StatsSection() {
   const time = useBogotaClock();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [canPlayVideo, setCanPlayVideo] = useState(true);
-
-  useEffect(() => {
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const conn = (navigator as any).connection;
-    const saveData = conn?.saveData || ["slow-2g", "2g", "3g"].includes(conn?.effectiveType);
-    setCanPlayVideo(!reduceMotion && !saveData);
-  }, []);
-
-  // Pausa el video cuando el usuario ya no lo está viendo (scrolleó de largo)
-  // y lo reanuda si vuelve. Un <video> reproduciéndose es trabajo constante
-  // de decodificación + pintado para el navegador — no tiene sentido pagar
-  // ese costo cuando está completamente fuera de la pantalla.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0 }
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, [canPlayVideo]);
 
   const lines: Line[] = [
     { prefix: "", value: "$ wilolink --status", cls: "g" },
@@ -144,23 +111,12 @@ export default function StatsSection() {
         </div>
       </div>
 
-      {/* Video de fondo con temática orbit */}
-      <div className="relative min-h-[260px]">
-        {canPlayVideo && (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-          >
-            <source src="/stats-orbit-bg.mp4" type="video/mp4" />
-          </video>
-        )}
-        {/* overlay oscuro para que el video no entre tan fuerte */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0e1a]/70 via-[#0a0e1a]/30 to-[#0a0e1a]/60" />
+      {/* Fondo estático (antes había un video acá) con la paleta de marca */}
+      <div className="relative min-h-[260px] bg-[radial-gradient(circle_at_50%_50%,#14382f_0%,#0a0e1a_70%)]">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-32 w-32 rounded-full border border-[#22d3b8]/25" />
+          <div className="absolute h-20 w-20 rounded-full border border-[#ffb020]/25" />
+        </div>
       </div>
     </section>
   );
