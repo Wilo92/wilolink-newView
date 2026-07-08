@@ -46,10 +46,12 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
     let isVisible = true; // se actualiza con el IntersectionObserver de abajo
     let nodes: { x: number; y: number; vx: number; vy: number }[] = [];
 
+    const RENDER_SCALE = 0.6;
+
     function resize() {
       const parent = canvas!.parentElement!;
-      w = canvas!.width = parent.clientWidth;
-      h = canvas!.height = parent.clientHeight;
+      w = canvas!.width = Math.round(parent.clientWidth * RENDER_SCALE);
+      h = canvas!.height = Math.round(parent.clientHeight * RENDER_SCALE);
       const count = Math.round((w * h) / 9000);
       nodes = Array.from({ length: count }, () => ({
         x: Math.random() * w,

@@ -106,10 +106,16 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       };
     });
 
+    // Renderiza el canvas a menor resolución interna (60% del tamaño real) y
+    // lo estira visualmente con CSS al 100%. El navegador tiene que "pintar"
+    // muchos menos píxeles por cuadro, y como es un fondo abstracto en
+    // movimiento, la pérdida de nitidez es imperceptible.
+    const RENDER_SCALE = 0.6;
+
     function resize() {
       const parent = canvas!.parentElement!;
-      w = canvas!.width = parent.clientWidth;
-      h = canvas!.height = parent.clientHeight;
+      w = canvas!.width = Math.round(parent.clientWidth * RENDER_SCALE);
+      h = canvas!.height = Math.round(parent.clientHeight * RENDER_SCALE);
       nodes = buildNodes(w, h);
     }
     resize();
