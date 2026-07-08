@@ -49,3 +49,8 @@ body {
     animation: none !important;
   }
 }
+
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
