@@ -74,6 +74,28 @@ export default function StatsSection() {
     setCanPlayVideo(!reduceMotion && !saveData);
   }, []);
 
+  // Pausa el video cuando el usuario ya no lo está viendo (scrolleó de largo)
+  // y lo reanuda si vuelve. Un <video> reproduciéndose es trabajo constante
+  // de decodificación + pintado para el navegador — no tiene sentido pagar
+  // ese costo cuando está completamente fuera de la pantalla.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [canPlayVideo]);
+
   const lines: Line[] = [
     { prefix: "", value: "$ wilolink --status", cls: "g" },
     { prefix: "experiencia .......... ", value: "+2 años", cls: "o" },
