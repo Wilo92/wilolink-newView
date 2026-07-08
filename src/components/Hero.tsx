@@ -300,7 +300,7 @@ export default function Hero() {
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
 
-      <div className="relative z-10 w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[15px] text-[#9aa3c9] backdrop-blur-sm">
+      <div className="relative z-10 w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[15px] text-[#9aa3c9]">
         <div className="mb-2 flex gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
