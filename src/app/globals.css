@@ -54,3 +54,6 @@ body {
 .custom-cursor-active * {
   cursor: none !important;
 }
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
