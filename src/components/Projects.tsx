@@ -26,7 +26,7 @@ const PROJECTS: Project[] = [
     name: "Crediorbit",
     url: "https://www.crediorbit.com", // TODO: URL real
     urlLabel: "crediorbit.com",
-    media: null, // ej: { type: "video", src: "/proyectos/sonrisa-demo.mp4" }
+    media: {type:"image", src:"/proyectos/credi.png"},
   },
   {
     name: "Intranet Contraloria Risaralda",
