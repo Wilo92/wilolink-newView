@@ -1,5 +1,6 @@
 "use client";
 
+import { span } from "framer-motion/client";
 import { useEffect, useState } from "react";
 
 // TODO: cuando conectes el contador de visitas real, reemplaza este número
@@ -24,6 +25,24 @@ function useBogotaClock() {
     }, []);
 
     return time;
+}
+
+
+function useBogotaDate() {
+    const [date, setDate] = useState("cargando...");
+
+    useEffect(() => {
+        const fmt = new Intl.DateTimeFormat("es-CO", {
+            timeZone: "America/Bogota",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+        setDate(fmt.format(new Date()));
+    }, []);
+
+    return date;
 }
 
 // Líneas que se "escriben" una sola vez al montar (no en loop, a diferencia
@@ -62,6 +81,7 @@ function useBootTyping(lines: Line[]) {
 
 function StatsTerminal() {
     const time = useBogotaClock();
+    const date = useBogotaDate();
 
     const lines: Line[] = [
         { prefix: "", value: "$ wilobyte --status", cls: "g" },
@@ -72,13 +92,14 @@ function StatsTerminal() {
             value: PLACEHOLDER_VISITS.toLocaleString("es-CO"),
             cls: "m",
         },
+        { prefix: "", value: "$ date --now", cls: "g" },
     ];
 
     const { revealed, done } = useBootTyping(lines);
 
     return (
         <div className="flex justify-center md:justify-start">
-            <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[13px] text-[#9aa3c9]">
+            <div className="w-full max-w-md rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[13px] text-[#9aa3c9]">
                 <div className="mb-3 flex gap-1.5 border-b border-[#1c2340] pb-3">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
@@ -87,13 +108,22 @@ function StatsTerminal() {
 
                 {revealed.map((line, i) => (
                     <div key={i} className="min-h-[20px] whitespace-pre">
-                        {line}
+                        {line.startsWith("$") ? (
+                            <span className="text-[#ffb020]">{line}</span>
+                        ) : (
+                            line)}
                     </div>
                 ))}
 
                 {/* Línea de la hora: solo aparece cuando terminó de "escribir" lo demás,
             y se actualiza cada segundo sin animación de tecleo (sería raro
             re-escribir la hora letra por letra 60 veces por minuto) */}
+                {done && (
+                    <div className="min-h-[20px] whitespace-pre">
+                        {"fecha-actual .......... "}
+                        <span className="text-[#ffb020]">{date}</span>
+                    </div>
+                )}
                 {done && (
                     <div className="min-h-[20px] whitespace-pre">
                         {"hora-local ............ "}
@@ -121,53 +151,53 @@ const STEPS = [
 function ProcessTimeline() {
     return (
         <div className="w-full">
-            
-                <h2 className="mb-1 text-center text-2xl font-extrabold text-white md:text-3xl">
-                    Nuestra forma de trabajar
-                </h2>
-                <p className="mb-14 text-center text-sm text-[#8b93b8]">
-                    Una línea de tiempo.
-                </p>
 
-                {/* --- Versión mobile: vertical, con la línea a la izquierda --- */}
-                <div className="flex flex-col md:hidden">
-                    {STEPS.map((step, i) => (
-                        <div key={step.num} className="relative flex gap-4 pb-8 last:pb-0">
-                            {i < STEPS.length - 1 && (
-                                <div className="absolute left-[17px] top-9 h-[calc(100%-8px)] w-0.5 bg-[#232b45]" />
-                            )}
-                            <div
-                                className="z-10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
-                                style={{ borderColor: step.color, color: step.color }}
-                            >
-                                {step.num}
-                            </div>
-                            <div className="pt-1.5 text-[15px] font-bold text-white">
-                                {step.title}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            <h2 className="mb-1 text-center text-2xl font-extrabold text-white md:text-3xl">
+                Nuestra forma de trabajar
+            </h2>
+            <p className="mb-14 text-center text-sm text-[#8b93b8]">
+                Una línea de tiempo.
+            </p>
 
-                {/* --- Versión desktop: horizontal, con la línea arriba --- */}
-                <div className="relative hidden md:flex md:justify-between">
-                    <div className="absolute left-[8%] right-[8%] top-[19px] h-0.5 bg-[#232b45]" />
-                    {STEPS.map((step) => (
+            {/* --- Versión mobile: vertical, con la línea a la izquierda --- */}
+            <div className="flex flex-col lg:hidden">
+                {STEPS.map((step, i) => (
+                    <div key={step.num} className="relative flex gap-4 pb-8 last:pb-0">
+                        {i < STEPS.length - 1 && (
+                            <div className="absolute left-[17px] top-9 h-[calc(100%-8px)] w-0.5 bg-[#232b45]" />
+                        )}
                         <div
-                            key={step.num}
-                            className="relative z-10 flex w-[18%] flex-col items-center text-center"
+                            className="z-10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
+                            style={{ borderColor: step.color, color: step.color }}
                         >
-                            <div
-                                className="mb-2.5 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
-                                style={{ borderColor: step.color, color: step.color }}
-                            >
-                                {step.num}
-                            </div>
-                            <div className="text-sm font-bold text-white">{step.title}</div>
+                            {step.num}
                         </div>
-                    ))}
-                </div>
-            
+                        <div className="pt-1.5 text-[15px] font-bold text-white">
+                            {step.title}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* --- Versión desktop: horizontal, con la línea arriba --- */}
+            <div className="relative hidden lg:flex lg:justify-between">
+                <div className="absolute left-[8%] right-[8%] top-[19px] h-0.5 bg-[#232b45]" />
+                {STEPS.map((step) => (
+                    <div
+                        key={step.num}
+                        className="relative z-10 flex w-[18%] flex-col items-center text-center"
+                    >
+                        <div
+                            className="mb-2.5 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
+                            style={{ borderColor: step.color, color: step.color }}
+                        >
+                            {step.num}
+                        </div>
+                        <div className="text-sm font-bold text-white">{step.title}</div>
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 }
