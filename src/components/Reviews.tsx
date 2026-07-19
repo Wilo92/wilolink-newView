@@ -1,7 +1,4 @@
-// ============================================================
-// EDITA AQUÍ tus reseñas reales de Google (texto y nombre del cliente).
-// Puedes copiarlas directo de tu perfil de Google Business.
-// ============================================================
+
 const REVIEWS = [
   {
     text: "Excelente atención, resolvió el problema de mi laptop el mismo día. Muy recomendado.",
@@ -26,26 +23,6 @@ const REVIEWS = [
 const RATING = 4.9;
 const REVIEW_COUNT = 10;
 
-const TRUST_SEALS = [
-  {
-    icon: "⚡",
-    title: "Respuesta rápida",
-    desc: "Te respondo el mismo día",
-    color: "#22d3b8",
-  },
-  {
-    icon: "🛠️",
-    title: "Garantía en el servicio",
-    desc: "Si algo no queda bien, lo corrijo",
-    color: "#ffb020",
-  },
-  {
-    icon: "🎯",
-    title: "Atención personalizada",
-    desc: "Trabajas directo conmigo",
-    color: "#22d3b8",
-  },
-] as const;
 
 export default function Reviews() {
   return (
@@ -91,31 +68,9 @@ export default function Reviews() {
             </div>
           ))}
         </div>
-
-        <div className="my-8 h-px bg-[#1c2340]" />
-
-        {/* Sellos de confianza — mismos colores teal/naranja del resto del sitio */}
-        <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-          {TRUST_SEALS.map((seal) => (
-            <div
-              key={seal.title}
-              className="rounded-xl border-t-[3px] bg-[#12172a] p-5"
-              style={{ borderTopColor: seal.color }}
-            >
-              <div
-                className="mx-auto mb-2.5 flex h-8.5 w-8.5 items-center justify-center rounded-lg text-[15px]"
-                style={{ backgroundColor: `${seal.color}1f`, color: seal.color }}
-              >
-                {seal.icon}
-              </div>
-              <div className="mb-1 text-[13.5px] font-bold text-white">
-                {seal.title}
-              </div>
-              <div className="text-[11px] text-[#8b93b8]">{seal.desc}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
 }
+
+

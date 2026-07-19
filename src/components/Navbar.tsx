@@ -8,11 +8,15 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
 const NAV_LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/directorio", label: "Directorio" },
-  { href: "/agente-ia", label: "Agente IA" },
-  { href: "/game", label: "Game" },
-  { href: "/readme", label: "Readme" },
+  { href: "/", label: "Inicio" , external:false},
+  { href: "/crediorbit", label: "Crediorbit.com",external: false },
+  { href: "/agente-ia", label: "Agente IA",external: false },
+  { href: "/game", label: "Game",external: false },
+  {
+    href: "https://myhdv.wilolink.com",
+    label: "Freelancer",
+    external: true,
+  },
 ] as const;
 
 export default function Navbar() {
@@ -55,19 +59,32 @@ export default function Navbar() {
           />
         </Link>
         <div className="hidden items-center gap-1 rounded-full border border-white/15 bg-black/25 p-1.5 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={isActive(link.href) ? "page" : undefined}
-              className={`rounded-full px-3.5 py-1.5 text-[13.5px] font-medium transition-colors ${isActive(link.href)
-                  ? "bg-white text-[#1a1206]"
-                  : "text-[#d8dcf5] hover:text-white"
+          {NAV_LINKS.map((link) =>
+            link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-[#d8dcf5] transition-colors hover:text-white"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`rounded-full px-3.5 py-1.5 text-[13.5px] font-medium transition-colors ${
+                  isActive(link.href)
+                    ? "bg-white text-[#1a1206]"
+                    : "text-[#d8dcf5] hover:text-white"
                 }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </div>
 
         <Link
@@ -98,17 +115,32 @@ export default function Navbar() {
             transition={{ duration: 0.18, ease: "easeOut" }}
             className="flex flex-col gap-1 border-t border-white/10 bg-[#161b30] p-3 md:hidden"
           >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive(link.href) ? "page" : undefined}
-                className={`rounded-xl px-4 py-2.5 text-sm font-medium ${isActive(link.href) ? "bg-white text-[#1a1206]" : "text-[#d8dcf5]"
+            {NAV_LINKS.map((link) =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl px-4 py-2.5 text-sm font-medium text-[#d8dcf5]"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`rounded-xl px-4 py-2.5 text-sm font-medium ${
+                    isActive(link.href)
+                      ? "bg-white text-[#1a1206]"
+                      : "text-[#d8dcf5]"
                   }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <Link
               href="/contacto"
               className="mt-1 rounded-xl bg-[#22d3b8] px-4 py-2.5 text-center text-sm font-bold text-[#1a1206]"
