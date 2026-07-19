@@ -43,9 +43,9 @@ const PROJECTS: Project[] = [
 
   {
     name: "Analisis datos contratacion publica",
-    url: "https://feconder.github.io/",
-    urlLabel: "feconder.github.io",
-    media: { type: "image", src: "/proyectos/feconder.png" },
+    url: "https://contraloria-risaralda.streamlit.app/",
+    urlLabel: "",
+    media: { type: "video", src: "/proyectos/video.mp4" },
   },
 ];
 
