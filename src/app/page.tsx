@@ -5,6 +5,7 @@ import Services from "@/components/Services";
 import Reviews from "@/components/Reviews";
 import CallbackForm  from "@/components/CallbackForm";
 import StatsAndProcess from "@/components/StatsAndProcess";
+import ContactInfo from "@/components/ContactInfo";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Reviews />
       
       <CallbackForm />
+      <ContactInfo />
       <TechCarousel />
 
 
