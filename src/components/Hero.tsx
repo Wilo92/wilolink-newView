@@ -311,7 +311,7 @@ export default function Hero() {
         style={{ fontFamily: "'Space Grotesk', sans-serif" }}
       >
         <span className="text-[#f4f2ec]">Wilo</span>
-        <span className="text-[#5eead4]">Byte</span>
+        <span className="text-[#5eead4]">Link</span>
         <span className="ml-1 inline-block h-10 w-1.5 animate-pulse bg-[#ffb020] align-middle" />
       </h1>
 

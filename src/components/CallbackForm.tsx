@@ -25,6 +25,9 @@ export default function CallbackForm() {
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setSent(true);
+    setName("");
+    setPhone("");
+    setMessage("");
   }
 
   return (
@@ -44,9 +47,15 @@ export default function CallbackForm() {
               Se abrió WhatsApp con tu mensaje — solo dale enviar allá y te
               contacto lo antes posible.
             </p>
+            <button
+              onClick={() => setSent(false)}
+              className="mt-4 text-[12px] text-[#5eead4] underline underline-offset-2 hover:text-[#22d3b8]"
+            >
+              Enviar otra solicitud
+            </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <label className="mb-1 block text-[11px] text-[#6b7280]">
               Como te llaman tus familiares y amigos
             </label>
