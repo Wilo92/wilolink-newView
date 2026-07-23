@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 import CustomCursor from "@/components/CustomCursor";
+import WelcomeSplash from "@/components/WelcomeSplash";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <WelcomeSplash />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
