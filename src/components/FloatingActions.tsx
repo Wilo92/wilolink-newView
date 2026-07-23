@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Plus, X } from "lucide-react";
 
 // TODO: reemplaza por tu número real, formato internacional sin + ni espacios (ej. 573001234567)
-const WHATSAPP_NUMBER = "573000000000";
+const WHATSAPP_NUMBER = "573003553762";
 const WHATSAPP_MESSAGE = "Hola, vi tu sitio WiloLink y quiero saber más sobre tus servicios.";
 
 // TODO: reemplaza por tu link corto de reseña de Google Business

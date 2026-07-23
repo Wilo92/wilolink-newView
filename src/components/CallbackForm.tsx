@@ -5,7 +5,7 @@ import { useState } from "react";
 // Mismo número que usa FloatingActions.tsx — considera moverlo a un solo
 // archivo de constantes compartido (ej. src/lib/constants.ts) cuando tengas
 // más lugares que lo necesiten, para no repetirlo en varios componentes.
-const WHATSAPP_NUMBER = "573000000000";
+const WHATSAPP_NUMBER = "573003553762";
 
 export default function CallbackForm() {
   const [name, setName] = useState("");
@@ -35,7 +35,7 @@ export default function CallbackForm() {
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
         </div>
-        <p className="mb-4 text-[#ffb020]">$ wilolink --contactar</p>
+        <p className="mb-4 text-[#ffb020]">$ wilolink --Contactar</p>
 
         {sent ? (
           <div className="py-6 text-center">
@@ -48,18 +48,18 @@ export default function CallbackForm() {
         ) : (
           <form onSubmit={handleSubmit}>
             <label className="mb-1 block text-[11px] text-[#6b7280]">
-              Tu nombre
+              Como te llaman tus familiares y amigos
             </label>
             <input
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Escribe tu nombre completo"
+              placeholder="Escribe tu alias"
               className="mb-3.5 w-full border-b border-[#232b45] bg-transparent pb-1.5 font-sans text-[15px] text-white outline-none focus:border-[#22d3b8]"
             />
 
             <label className="mb-1 block text-[11px] text-[#6b7280]">
-              Tu WhatsApp
+              Tu numero de WhatsApp
             </label>
             <input
               required
@@ -71,7 +71,7 @@ export default function CallbackForm() {
             />
 
             <label className="mb-1 block text-[11px] text-[#6b7280]">
-              ¿Qué necesitas?
+              ¿En que puedo ayudarte?
             </label>
             <textarea
               required
