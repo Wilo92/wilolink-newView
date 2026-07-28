@@ -55,7 +55,7 @@ export default function Navbar() {
             width={180}
             height={50}
             priority
-            className="h-18 w-auto"
+            className="h-19 w-auto"
           />
         </Link>
         <div className="hidden items-center gap-1 rounded-full border border-white/15 bg-black/25 p-1.5 md:flex">
@@ -66,7 +66,7 @@ export default function Navbar() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-[#d8dcf5] transition-colors hover:text-white"
+                className="rounded-full px-3.5 py-1.5 text-sm font-medium text-[#d8dcf5] transition-colors hover:text-white"
               >
                 {link.label}
               </a>
@@ -89,7 +89,7 @@ export default function Navbar() {
 
         <Link
           href="/contacto"
-          className="hidden rounded-full bg-[#22d3b8] px-4 py-2 text-[13px] font-bold text-[#1a1206] transition-transform hover:scale-105 md:block"
+          className="hidden rounded-full bg-[#22d3b8] px-4 py-2 text-sm font-bold text-[#1a1206] transition-transform hover:scale-105 md:block"
         >
           Contacto
         </Link>
@@ -122,7 +122,7 @@ export default function Navbar() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl px-4 py-2.5 text-sm font-medium text-[#d8dcf5]"
+                  className="rounded-xl px-4 py-2.5 text-base font-medium text-[#d8dcf5]"
                 >
                   {link.label}
                 </a>

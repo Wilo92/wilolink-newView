@@ -8,13 +8,14 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mon
 
 const COMMANDS = [
   { prefix: "$ ", text: "whoami", pause: 500 },
-  { prefix: "", text: "wilo · dev web · redes · hardware", pause: 700 },
-  { prefix: "$ ", text: "./servicios --listar", pause: 400 },
-  { prefix: "› ", text: "desarrollo-web ....... online", pause: 150 },
-  { prefix: "› ", text: "redes-admin .......... online", pause: 150 },
-  { prefix: "› ", text: "reparacion-hw ........ online", pause: 150 },
-  { prefix: "$ ", text: "esperando conexión", pause: 1400 },
+  { prefix: "", text: "wilo · full-stack developer · networking · IT support", pause: 700 },
+  { prefix: "$ ", text: "./services --list", pause: 400 },
+  { prefix: "› ", text: "web development ........ available", pause: 150 },
+  { prefix: "› ", text: "IT training ............ available", pause: 150 },
+  { prefix: "› ", text: "hardware & software .... available", pause: 150 },
+  { prefix: "$ ", text: "awaiting client connection...", pause: 1400 },
 ] as const;
+
 
 type Node = {
   x: number;
@@ -312,7 +313,7 @@ export default function Hero() {
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             >
               <span className="text-[#f4f2ec]">Wilo</span>
-              <span className="text-[#5eead4]">Link</span>
+              <span className="text-[#b5501c]">Link</span>
               <span className="ml-1 inline-block h-10 w-1.5 animate-pulse bg-[#ffb020] align-middle" />
             </h1>
 
@@ -324,14 +325,14 @@ export default function Hero() {
               href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md bg-[#5eead4] px-5 py-3 text-sm font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
+              className="inline-flex items-center gap-2 rounded-md bg-[#b5501c] px-5 py-3 text-base font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               iniciar proyecto →
             </a>
           </div>
 
-          <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[15px] text-[#9aa3c9]">
+          <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[13px] text-[#9aa3c9] md:text-[15px]">
             <div className="mb-2 flex gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
               <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
