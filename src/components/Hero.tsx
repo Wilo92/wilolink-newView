@@ -301,66 +301,73 @@ export default function Hero() {
   const lines = useTypingLoop();
 
   return (
-    <section className="relative h-[75vh] overflow-hidden bg-[#0a0e1a] md:h-screen">
-  <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+    <>
+      <section className="relative h-[75vh] overflow-hidden bg-[#0a0e1a] md:h-screen">
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
-  <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center justify-between gap-12 px-6 md:gap-16 md:px-12">
-    <div className="max-w-md">
-      <h1
-        className="mb-5 text-4xl font-bold leading-[1.05] tracking-tight md:text-5xl lg:text-6xl"
-        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-      >
-        <span className="text-[#f4f2ec]">Wilo</span>
-        <span className="text-[#5eead4]">Link</span>
-        <span className="ml-1 inline-block h-10 w-1.5 animate-pulse bg-[#ffb020] align-middle" />
-      </h1>
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center justify-between gap-12 px-6 md:gap-16 md:px-12">
+          <div className="max-w-md">
+            <h1
+              className="mb-5 text-4xl font-bold leading-[1.05] tracking-tight md:text-5xl lg:text-6xl"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              <span className="text-[#f4f2ec]">Wilo</span>
+              <span className="text-[#5eead4]">Link</span>
+              <span className="ml-1 inline-block h-10 w-1.5 animate-pulse bg-[#ffb020] align-middle" />
+            </h1>
 
-      <p className="mb-7 text-lg text-[#9aa3c9] md:text-xl">
-        Tecnología que se entiende.
-      </p>
+            <p className="mb-7 text-lg text-[#9aa3c9] md:text-xl">
+              Tecnología que se entiende.
+            </p>
 
-      <a
-        href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-md bg-[#5eead4] px-5 py-3 text-sm font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
-        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-      >
-        iniciar proyecto →
-      </a>
-    </div>
-
-    <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[15px] text-[#9aa3c9]">
-      <div className="mb-2 flex gap-1.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-      </div>
-
-      <div className="h-[176px] overflow-hidden">
-        {lines.map((line, i) => (
-          <div key={i} className="min-h-[22px] whitespace-pre">
-            {line.startsWith("$") ? (
-              <span className="text-[#5eead4]">{line}</span>
-            ) : line.startsWith("›") ? (
-              <span>
-                <span className="text-[#ffb020]">›</span>
-                {line.slice(1)}
-              </span>
-            ) : (
-              line
-            )}
-            {i === lines.length - 1 && (
-              <span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-[#5eead4]" />
-            )}
+            <a
+              href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-[#5eead4] px-5 py-3 text-sm font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              iniciar proyecto →
+            </a>
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
 
-  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
-</section >
-  
+          <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[15px] text-[#9aa3c9]">
+            <div className="mb-2 flex gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+            </div>
+
+            <div className="h-[176px] overflow-hidden">
+              {lines.map((line, i) => (
+                <div key={i} className="min-h-[22px] whitespace-pre">
+                  {line.startsWith("$") ? (
+                    <span className="text-[#5eead4]">{line}</span>
+                  ) : line.startsWith("›") ? (
+                    <span>
+                      <span className="text-[#ffb020]">›</span>
+                      {line.slice(1)}
+                    </span>
+                  ) : (
+                    line
+                  )}
+                  {i === lines.length - 1 && (
+                    <span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-[#5eead4]" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
+      </section >
+
+      <div className="flex h-[35vh] items-center justify-center bg-[#0a0e1a] px-6 text-center md:hidden">
+        <p className="text-2xl font-semibold text-[#f4f2ec]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          tu <span className="text-[#5eead4]">aliado</span>
+        </p>
+      </div>
+    </>
   );
 }
