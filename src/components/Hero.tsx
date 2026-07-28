@@ -301,7 +301,7 @@ export default function Hero() {
   const lines = useTypingLoop();
 
   return (
-    <section className="relative h-[460px] overflow-hidden bg-[#0a0e1a] md:h-[560px]">
+    <section className="relative h-[75vh] overflow-hidden bg-[#0a0e1a] md:h-screen">
   <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
   <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center justify-between gap-12 px-6 md:gap-16 md:px-12">

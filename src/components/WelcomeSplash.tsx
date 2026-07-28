@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Oswald, Sacramento, Montserrat } from "next/font/google";
+import Image from 'next/image';
 
 const oswald = Oswald({ subsets: ["latin"], weight: ["400", "500"] });
 const sacramento = Sacramento({ subsets: ["latin"], weight: "400" });

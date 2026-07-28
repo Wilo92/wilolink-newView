@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 142 159" width="142" height="159">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0f3d"></stop>
+      <stop offset="50%" stop-color="#2a1550"></stop>
+      <stop offset="100%" stop-color="#160a30"></stop>
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bfeaff"></stop>
+      <stop offset="50%" stop-color="#5ad4f0"></stop>
+      <stop offset="100%" stop-color="#2ba8e0"></stop>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#3a2470" stop-opacity="0.9"></stop>
+      <stop offset="100%" stop-color="#160a30" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="142" height="159" rx="28" fill="url(#bg)"></rect>
+  <rect x="0" y="0" width="142" height="159" rx="28" fill="url(#glow)"></rect>
+  <circle cx="71" cy="82" r="36" fill="none" stroke="url(#ring)" stroke-width="4"></circle>
+  <circle cx="71" cy="82" r="26" fill="none" stroke="url(#ring)" stroke-width="3.5"></circle>
+  <path d="M 71 46 A 36 36 0 0 1 71 118" fill="none" stroke="none"></path>
+  <path d="M 42 82 A 29 29 0 0 1 62 54" fill="none" stroke="#160a30" stroke-width="6" stroke-linecap="round" opacity="0"></path>
+  <g stroke-linecap="round">
+    <path d="M 45 100 A 36 36 0 0 1 45 64" fill="none" stroke="#160a30" stroke-width="0" opacity="0"></path>
+  </g>
+  <path d="M 71 44 A 38 38 0 1 0 71 120" fill="none" stroke="url(#ring)" stroke-width="4" stroke-linecap="round" transform="rotate(-8 71 82)"></path>
+  <g transform="translate(71,80)">
+    <path d="M 0 -34 C 9 -24 12 -12 12 2 C 12 10 9 17 0 24 C -9 17 -12 10 -12 2 C -12 -12 -9 -24 0 -34 Z" fill="#eaf9ff" stroke="#8fd8f0" stroke-width="1.5"></path>
+    <circle cx="0" cy="-8" r="6" fill="#2ba8e0" stroke="#eaf9ff" stroke-width="1.5"></circle>
+    <path d="M -12 2 C -20 6 -22 16 -20 24 C -14 20 -11 14 -10 8 Z" fill="#bfeaff"></path>
+    <path d="M 12 2 C 20 6 22 16 20 24 C 14 20 11 14 10 8 Z" fill="#bfeaff"></path>
+    <path d="M -5 22 L 0 34 L 5 22 Z" fill="#5ad4f0"></path>
+  </g>
+</svg>
