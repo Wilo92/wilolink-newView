@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion, type Variants } from "framer-motion";
 
 const SERVICES = [
   {
@@ -29,6 +30,16 @@ const SERVICES = [
   },
 ] as const;
 
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
 function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,7 +54,7 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
     let raf = 0;
     let w = 0;
     let h = 0;
-    let isVisible = true; // se actualiza con el IntersectionObserver de abajo
+    let isVisible = true;
     let nodes: { x: number; y: number; vx: number; vy: number }[] = [];
 
     const RENDER_SCALE = 0.6;
@@ -67,8 +78,6 @@ function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>)
       return () => window.removeEventListener("resize", resize);
     }
 
-    // Pausa el canvas por completo cuando el usuario ya hizo scroll más allá
-    // de esta sección — evita gastar CPU dibujando algo que nadie está viendo.
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -127,7 +136,6 @@ export default function Services() {
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-[1fr_1.3fr]">
-      {/* Panel izquierdo: gradiente de marca + malla animada */}
       <div className="relative flex flex-col justify-center overflow-hidden bg-[linear-gradient(100deg,#1a2138_0%,#2a2f52_45%,#b5501c_100%)] px-8 py-14 md:px-10">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" />
         <div className="relative">
@@ -140,29 +148,33 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Panel derecho: grid de servicios */}
-      <div className="grid grid-cols-1 gap-3.5 bg-[#0a0e1a] p-8 sm:grid-cols-2 md:p-10">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={containerVariants}
+        className="grid grid-cols-1 gap-3.5 bg-[#0a0e1a] p-8 sm:grid-cols-2 md:p-10"
+      >
         {SERVICES.map((s) => (
-          <div
+          <motion.div
             key={s.title}
+            variants={cardVariants}
             className="group relative flex min-h-[220px] flex-col justify-end overflow-hidden rounded-xl border-l-[3px] p-5 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
             style={{ borderLeftColor: s.accent }}
           >
-            {/* Imagen de fondo */}
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
               style={{ backgroundImage: `url(${s.image})` }}
             />
-            {/* Overlay oscuro para que el texto sea legible sobre cualquier foto */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1acc] to-[#0a0e1a66]" />
 
             <div className="relative">
               <h3 className="mb-1.5 text-[15px] font-bold text-white">{s.title}</h3>
               <p className="text-[12.5px] leading-relaxed text-[#d8dcf5]">{s.desc}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

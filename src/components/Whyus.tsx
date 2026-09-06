@@ -1,8 +1,7 @@
-// ============================================================
-// EDITA AQUÍ los diferenciales. icon acepta cualquier emoji o
-// puedes reemplazarlo por un ícono de una librería (ej. lucide-react)
-// si prefieres consistencia vectorial en vez de emojis.
-// ============================================================
+"use client";
+
+import { motion, type Variants } from "framer-motion";
+
 const REASONS = [
   {
     icon: "⚡",
@@ -30,19 +29,30 @@ const REASONS = [
   },
 ] as const;
 
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+};
+
 export default function WhyUs() {
   return (
-    // Mismo mecanismo de columnas que Services.tsx (grid-cols con fracciones),
-    // pero invertido: 1.3fr/1fr en vez de 1fr/1.3fr, para que el panel de
-    // degradado quede a la derecha en vez de a la izquierda.
-    // TODO: ajusta md:min-h-[518px] al alto real de tu sección de Servicios
-    // (inspecciónalo en DevTools) para que ambos bloques midan exactamente igual.
     <section className="grid grid-cols-1 overflow-hidden bg-[#0a0e1a] md:min-h-[518px] md:grid-cols-[1.3fr_1fr]">
-      {/* Grid 2×2 de diferenciales — a la izquierda */}
-      <div className="grid w-full grid-cols-1 gap-px bg-[#151a30] sm:grid-cols-2">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={containerVariants}
+        className="grid w-full grid-cols-1 gap-px bg-[#151a30] sm:grid-cols-2"
+      >
         {REASONS.map((reason) => (
-          <div
+          <motion.div
             key={reason.title}
+            variants={cardVariants}
             className="flex flex-col justify-center border-t-[3px] bg-[#0e1223] p-8"
             style={{ borderTopColor: reason.color }}
           >
@@ -58,11 +68,10 @@ export default function WhyUs() {
             <p className="text-sm leading-relaxed text-[#9aa3c9]">
               {reason.desc}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Panel con degradado — a la derecha (espejo del bloque de Servicios) */}
       <div className="relative flex w-full flex-col justify-center overflow-hidden bg-gradient-to-br from-[#1c2148] via-[#3a2f52] to-[#c2571f] px-8 py-14 md:px-10">
         <div className="pointer-events-none absolute inset-0 opacity-30">
           <div className="absolute left-[15%] top-[20%] h-1 w-1 rounded-full bg-white" />

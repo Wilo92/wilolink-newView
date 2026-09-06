@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { motion, type Variants } from "framer-motion";
 
 type ProjectMedia =
   | { type: "image"; src: string }
@@ -24,9 +24,9 @@ const PROJECTS: Project[] = [
   },
   {
     name: "Crediorbit",
-    url: "https://www.crediorbit.com", // TODO: URL real
+    url: "https://www.crediorbit.com",
     urlLabel: "crediorbit.com",
-    media: {type:"image", src:"/proyectos/credi.png"},
+    media: { type: "image", src: "/proyectos/credi.png" },
   },
   {
     name: "Intranet Contraloria Risaralda",
@@ -40,7 +40,6 @@ const PROJECTS: Project[] = [
     urlLabel: "feconder.github.io",
     media: { type: "image", src: "/proyectos/feconder.png" },
   },
-
   {
     name: "Analisis datos contratacion publica",
     url: "https://contraloria-risaralda.streamlit.app/",
@@ -50,7 +49,17 @@ const PROJECTS: Project[] = [
 ];
 
 const CARD_WIDTH = 220;
-const GAP = 16; // debe coincidir con la clase gap-4 (16px) de abajo
+const GAP = 16;
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
 
 export default function Projects() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -77,7 +86,6 @@ export default function Projects() {
         </p>
 
         <div className="relative">
-          {/* Flecha izquierda */}
           <button
             onClick={() => scrollByCard("left")}
             aria-label="Ver proyecto anterior"
@@ -86,14 +94,18 @@ export default function Projects() {
             <ChevronLeft size={18} />
           </button>
 
-          {/* Contenedor con scroll-snap */}
-          <div
+          <motion.div
             ref={scrollRef}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={containerVariants}
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {PROJECTS.map((project) => (
-              <a
+              <motion.a
                 key={project.name}
+                variants={cardVariants}
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -133,11 +145,10 @@ export default function Projects() {
                     {project.urlLabel} →
                   </p>
                 </div>
-              </a>
+              </motion.a>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Flecha derecha */}
           <button
             onClick={() => scrollByCard("right")}
             aria-label="Ver siguiente proyecto"

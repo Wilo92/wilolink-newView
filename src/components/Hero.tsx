@@ -8,14 +8,13 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mon
 
 const COMMANDS = [
   { prefix: "$ ", text: "whoami", pause: 500 },
-  { prefix: "", text: "wilo · full-stack developer · networking · IT support", pause: 700 },
+  { prefix: "", text: "full-stack developer · networking · IT support", pause: 700 },
   { prefix: "$ ", text: "./services --list", pause: 400 },
   { prefix: "› ", text: "web development ........ available", pause: 150 },
   { prefix: "› ", text: "IT training ............ available", pause: 150 },
   { prefix: "› ", text: "hardware & software .... available", pause: 150 },
   { prefix: "$ ", text: "awaiting client connection...", pause: 1400 },
 ] as const;
-
 
 type Node = {
   x: number;
@@ -86,11 +85,6 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mouseleave", handleLeave);
 
-    // --- Pre-renderiza el "brillo" de cada color UNA sola vez (sprite) ---
-    // en vez de llamar a createRadialGradient() por cada nodo, en cada frame.
-    // Esto es lo que se conoce como "sprite caching": lo caro (calcular el
-    // degradado) se hace una vez; en el loop de animación solo se copian
-    // píxeles ya calculados con drawImage, que es prácticamente gratis.
     function makeGlowSprite(color: string, radius: number) {
       const size = radius * 2;
       const off = document.createElement("canvas");
@@ -107,15 +101,11 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     const glowSprites: Record<string, { normal: HTMLCanvasElement; hover: HTMLCanvasElement }> = {};
     COLORS.forEach((c) => {
       glowSprites[c] = {
-        normal: makeGlowSprite(c, 3 * 4), // radio máximo (r=3) * factor normal (4)
-        hover: makeGlowSprite(c, 3 * 7), // radio máximo (r=3) * factor hover (7)
+        normal: makeGlowSprite(c, 3 * 4),
+        hover: makeGlowSprite(c, 3 * 7),
       };
     });
 
-    // Renderiza el canvas a menor resolución interna (60% del tamaño real) y
-    // lo estira visualmente con CSS al 100%. El navegador tiene que "pintar"
-    // muchos menos píxeles por cuadro, y como es un fondo abstracto en
-    // movimiento, la pérdida de nitidez es imperceptible.
     const RENDER_SCALE = 0.6;
 
     function resize() {
@@ -128,7 +118,6 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     window.addEventListener("resize", resize);
 
     if (reduceMotion) {
-      // Dibuja una sola vez, estático, y no anima más
       ctx.fillStyle = "#0a0e1a";
       ctx.fillRect(0, 0, w, h);
       nodes.forEach((n) => {
@@ -201,8 +190,6 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         }
       }
 
-      // conecta la terminal (su centro real en pantalla) a sus 4 nodos más cercanos,
-      // así se lee como "el nodo principal de la red" y no como una caja pegada encima
       const termPoint = { x: w * 0.82, y: h / 2 };
       const nearest = [...nodes]
         .sort(
@@ -301,74 +288,71 @@ export default function Hero() {
   useMeshCanvas(canvasRef);
   const lines = useTypingLoop();
 
+
   return (
-    <>
-      <section className="relative h-[75vh] overflow-hidden bg-[#0a0e1a] md:h-screen">
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center justify-between gap-12 px-6 md:gap-16 md:px-12">
-          <div className="max-w-md">
-            <h1
-              className="mb-5 text-4xl font-bold leading-[1.05] tracking-tight md:text-5xl lg:text-6xl"
-              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-            >
-              <span className="text-[#f4f2ec]">Wilo</span>
-              <span className="text-[#b5501c]">Link</span>
-              <span className="ml-1 inline-block h-10 w-1.5 animate-pulse bg-[#ffb020] align-middle" />
-            </h1>
+    <section className="relative min-h-[calc(100dvh-4rem)] md:h-screen overflow-hidden bg-[#0a0e1a]">
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
-            <p className="mb-7 text-lg text-[#9aa3c9] md:text-xl">
-              Tecnología que se entiende.
-            </p>
+      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center gap-6 px-6 md:flex-row md:items-center md:justify-between md:gap-16 md:px-12">
+        <div className="max-w-md">
+          <h1
+            className="mb-5 text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-8xl"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            <span className="text-[#f4f2ec]">Wilo</span>
+            <span className="text-[#b5501c]">Link</span>
 
-            <a
-              href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md bg-[#b5501c] px-5 py-3 text-base font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            >
-              iniciar proyecto →
-            </a>
-          </div>
+          </h1>
 
-          <div className="w-full max-w-sm rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[13px] text-[#9aa3c9] md:text-[15px]">
-            <div className="mb-2 flex gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-            </div>
+          <p className="mb-7 text-lg text-[#9aa3c9] md:text-xl">
+            Tu aliado tecnológico.
+          </p>
 
-            <div className="h-[176px] overflow-hidden">
-              {lines.map((line, i) => (
-                <div key={i} className="min-h-[22px] whitespace-pre">
-                  {line.startsWith("$") ? (
-                    <span className="text-[#5eead4]">{line}</span>
-                  ) : line.startsWith("›") ? (
-                    <span>
-                      <span className="text-[#ffb020]">›</span>
-                      {line.slice(1)}
-                    </span>
-                  ) : (
-                    line
-                  )}
-                  {i === lines.length - 1 && (
-                    <span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-[#5eead4]" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <a
+            href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md bg-[#b5501c] px-5 py-3 text-base font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            iniciar proyecto →
+          </a>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
-      </section >
+        <div className="w-full max-w-md md:max-w-xl rounded-xl border border-[#2a3355] bg-black p-4 font-mono text-[13px] text-[#9aa3c9] md:p-6 md:text-[18px]">
+          <div className="mb-2 flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
 
-      <div className="flex h-[35vh] items-center justify-center bg-[#0a0e1a] px-6 text-center md:hidden">
-        <p className="text-2xl font-semibold text-[#f4f2ec]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          tu <span className="text-[#5eead4]">aliado</span>
-        </p>
+          <div className="h-[130px] overflow-hidden md:h-[250px]">
+            {lines.map((line, i) => (
+              <div key={i} className="min-h-[22px] whitespace-pre">
+                {line.startsWith("$") ? (
+                  <span className="text-[#5eead4]">{line}</span>
+                ) : line.startsWith("›") ? (
+                  <span>
+                    <span className="text-[#ffb020]">›</span>
+                    {line.slice(1)}
+                  </span>
+                ) : (
+                  line
+                )}
+                {i === lines.length - 1 && (
+                  <span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-[#5eead4]" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </>
+
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
+    </section >
+
+
+
   );
 }
