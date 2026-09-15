@@ -38,7 +38,7 @@ export default function Footer() {
           </Link>
 
           <p className="text-[13.5px] italic text-[#e8e4ff]">
-            &ldquo;Gestiona, Conecta, Proyecta.&rdquo;
+            &ldquo;Conectamos ideas, desarrollamos soluciones.&rdquo;
           </p>
 
           <div className="text-right">

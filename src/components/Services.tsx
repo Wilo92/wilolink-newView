@@ -5,26 +5,26 @@ import { motion, type Variants } from "framer-motion";
 
 const SERVICES = [
   {
-    title: "Mantenimiento",
-    desc: "Diagnóstico, limpieza y reparación de laptops, PC de escritorio y dispositivos móviles. Mantenimiento preventivo para evitar fallas, y corrección de problemas de hardware o software cuando ya se presentaron.",
+    title: "Mantenimiento preventivo / correctivo",
+    desc: "Diagnóstico, limpieza y reparación de laptops, computadores de escritorio y dispositivos móviles. Mantenimiento preventivo para evitar fallas y corrección de problemas de hardware o software.",
     accent: "#22d3b8",
     image: "/services/mantenimiento.jpg",
   },
   {
     title: "Enseñanza",
-    desc: "Clases de informática básica pensadas para adultos, niños y personas sin experiencia técnica. Manejo de computador, internet, herramientas ofimáticas y uso seguro de la tecnología, a tu ritmo.",
+    desc: "Clases de informática básica para adultos, niños y personas sin experiencia técnica. Manejo del computador, internet, herramientas ofimáticas y uso seguro de la tecnología.",
     accent: "#ffb020",
     image: "/services/ensenanza.jpg",
   },
   {
     title: "Redes",
-    desc: "Instalación y administración de redes empresariales o domésticas: configuración de routers, cableado estructurado, control de acceso y monitoreo para que tu conexión sea estable y segura.",
+    desc: "Instalación y administración de redes empresariales o domésticas: configuración de routers, cableado estructurado y cámaras de seguridad.",
     accent: "#22d3b8",
     image: "/services/redes.jpg",
   },
   {
-    title: "Desarrollo",
-    desc: "Diseño y desarrollo de sitios web y sistemas de información a la medida de tu negocio, desde una landing sencilla hasta plataformas con base de datos y paneles de administración.",
+    title: "Desarrollo a la medida",
+    desc: "Diseño y desarrollo de sitios web y sistemas de información adaptados a tu negocio, desde landing pages hasta plataformas completas con bases de datos y paneles administrativos.",
     accent: "#ffb020",
     image: "/services/desarrollo.jpg",
   },
@@ -32,116 +32,161 @@ const SERVICES = [
 
 const containerVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: {
+    opacity: 0,
+    y: 25,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
 };
 
-function useMeshBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
+type NodeType = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+};
+
+function useMeshBackground(
+  canvasRef: React.RefObject<HTMLCanvasElement | null>
+) {
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return;
 
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    let animationId = 0;
+    let width = 0;
+    let height = 0;
+    let nodes: NodeType[] = [];
 
-    let raf = 0;
-    let w = 0;
-    let h = 0;
-    let isVisible = true;
-    let nodes: { x: number; y: number; vx: number; vy: number }[] = [];
+    const MAX_NODES = 80;
+    const CONNECTION_DISTANCE = 90;
 
-    const RENDER_SCALE = 0.6;
+    const resize = () => {
+      const parent = canvas.parentElement;
 
-    function resize() {
-      const parent = canvas!.parentElement!;
-      w = canvas!.width = Math.round(parent.clientWidth * RENDER_SCALE);
-      h = canvas!.height = Math.round(parent.clientHeight * RENDER_SCALE);
-      const count = Math.round((w * h) / 9000);
+      if (!parent) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      width = parent.clientWidth;
+      height = parent.clientHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const count = Math.min(
+        MAX_NODES,
+        Math.round((width * height) / 15000)
+      );
+
       nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
+        x: Math.random() * width,
+        y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.4,
         vy: (Math.random() - 0.5) * 0.4,
       }));
-    }
+    };
+
     resize();
+
     window.addEventListener("resize", resize);
 
-    if (reduceMotion) {
-      return () => window.removeEventListener("resize", resize);
-    }
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-        if (isVisible && !raf) draw();
-      },
-      { threshold: 0 }
-    );
-    observer.observe(canvas);
+      for (const node of nodes) {
+        node.x += node.vx;
+        node.y += node.vy;
 
-    function draw() {
-      if (!isVisible) {
-        raf = 0;
-        return;
+        if (node.x <= 0 || node.x >= width) node.vx *= -1;
+        if (node.y <= 0 || node.y >= height) node.vy *= -1;
       }
-      ctx!.clearRect(0, 0, w, h);
-      nodes.forEach((n) => {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > w) n.vx *= -1;
-        if (n.y < 0 || n.y > h) n.vy *= -1;
-      });
+
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-          if (d < 90) {
-            ctx!.strokeStyle = `rgba(255,255,255,${(1 - d / 90) * 0.25})`;
-            ctx!.lineWidth = 1;
-            ctx!.beginPath();
-            ctx!.moveTo(nodes[i].x, nodes[i].y);
-            ctx!.lineTo(nodes[j].x, nodes[j].y);
-            ctx!.stroke();
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < CONNECTION_DISTANCE) {
+            ctx.strokeStyle = `rgba(255,255,255,${
+              (1 - distance / CONNECTION_DISTANCE) * 0.25
+            })`;
+
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
           }
         }
       }
-      ctx!.fillStyle = "rgba(255,255,255,0.5)";
-      nodes.forEach((n) => {
-        ctx!.beginPath();
-        ctx!.arc(n.x, n.y, 1.5, 0, 7);
-        ctx!.fill();
-      });
-      raf = requestAnimationFrame(draw);
-    }
-    draw();
+
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+
+      for (const node of nodes) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
 
     return () => {
+      cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
-      observer.disconnect();
-      cancelAnimationFrame(raf);
     };
   }, [canvasRef]);
 }
 
 export default function Services() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useMeshBackground(canvasRef);
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-[1fr_1.3fr]">
-      <div className="relative flex flex-col justify-center overflow-hidden bg-[linear-gradient(100deg,#1a2138_0%,#2a2f52_45%,#b5501c_100%)] px-8 py-14 md:px-10">
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full opacity-50" />
-        <div className="relative">
+      <div className="relative overflow-hidden bg-[linear-gradient(100deg,#1a2138_0%,#2a2f52_45%,#b5501c_100%)] px-8 py-14 md:px-10 flex flex-col justify-center">
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full opacity-50 pointer-events-none"
+        />
+
+        <div className="relative z-10">
           <p className="mb-3 text-xs font-bold tracking-[0.08em] text-[#ffb020]">
             LO QUE HACEMOS
           </p>
+
           <h2 className="max-w-xs text-3xl font-extrabold leading-tight text-white">
             Un aliado técnico para todo lo que necesitas
           </h2>
@@ -153,26 +198,36 @@ export default function Services() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
         variants={containerVariants}
-        className="grid grid-cols-1 gap-3.5 bg-[#0a0e1a] p-8 sm:grid-cols-2 md:p-10"
+        className="grid grid-cols-1 gap-4 bg-[#0a0e1a] p-8 sm:grid-cols-2 md:p-10"
       >
-        {SERVICES.map((s) => (
-          <motion.div
-            key={s.title}
+        {SERVICES.map((service) => (
+          <motion.article
+            key={service.title}
             variants={cardVariants}
-            className="group relative flex min-h-[220px] flex-col justify-end overflow-hidden rounded-xl border-l-[3px] p-5 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
-            style={{ borderLeftColor: s.accent }}
+            className="group relative min-h-[220px] overflow-hidden rounded-xl border-l-[3px] p-5 flex flex-col justify-end transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            style={{
+              borderLeftColor: service.accent,
+            }}
           >
             <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
-              style={{ backgroundImage: `url(${s.image})` }}
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+              style={{
+                backgroundImage: `url(${service.image})`,
+              }}
             />
+
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1acc] to-[#0a0e1a66]" />
 
-            <div className="relative">
-              <h3 className="mb-1.5 text-[15px] font-bold text-white">{s.title}</h3>
-              <p className="text-[12.5px] leading-relaxed text-[#d8dcf5]">{s.desc}</p>
+            <div className="relative z-10">
+              <h3 className="mb-2 text-[15px] font-bold text-white">
+                {service.title}
+              </h3>
+
+              <p className="text-[12.5px] leading-relaxed text-[#d8dcf5]">
+                {service.desc}
+              </p>
             </div>
-          </motion.div>
+          </motion.article>
         ))}
       </motion.div>
     </section>

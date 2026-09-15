@@ -44,11 +44,7 @@ body {
   animation-play-state: paused;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none !important;
-  }
-}
+
 
 .custom-cursor-active,
 .custom-cursor-active * {

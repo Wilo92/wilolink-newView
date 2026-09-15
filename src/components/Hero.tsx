@@ -56,9 +56,7 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const reduceMotion = false;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -310,7 +308,7 @@ export default function Hero() {
           </p>
 
           <a
-            href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20info%20sobre%20un%20proyecto"
+            href="https://wa.me/573003553762"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-md bg-[#b5501c] px-5 py-3 text-base font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"

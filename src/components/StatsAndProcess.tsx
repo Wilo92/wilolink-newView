@@ -155,9 +155,7 @@ function ProcessTimeline() {
             <h2 className="mb-1 text-center text-2xl font-extrabold text-white md:text-3xl">
                 Nuestra forma de trabajar
             </h2>
-            <p className="mb-14 text-center text-sm text-[#8b93b8]">
-                Una línea de tiempo.
-            </p>
+           
 
             {/* --- Versión mobile: vertical, con la línea a la izquierda --- */}
             <div className="flex flex-col lg:hidden">
