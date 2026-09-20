@@ -19,6 +19,14 @@ const PASOS = [
   { titulo: "Complétala a tiempo", texto: "Descúbrela entera antes de quedarte sin vidas." },
 ];
 
+const ESTADOS_MUNECO = [
+  "Todavía no has fallado.",
+  "Primer fallo. Tranquilo.",
+  "Dos fallos. Ojo con la siguiente.",
+  "Tres fallos. Queda una sola vida.",
+  "Se acabó. Lo ahorcaste.",
+];
+
 type Partida = {
   progreso: string;
   intentos: number;
@@ -87,9 +95,11 @@ export default function GamePage() {
   }
 
   // El backend devuelve el progreso como "F R _ N T _ _"
-  const casillas = partida.progreso ? partida.progreso.split(" ") : [];
+  const casillas = partida.progreso ? partida.progreso.trim().split(/\s+/) : [];
   const acertada = (letra: string) => letrasUsadas.includes(letra) && casillas.includes(letra);
   const fallada = (letra: string) => letrasUsadas.includes(letra) && !casillas.includes(letra);
+
+  const errores = Math.max(0, Math.min(VIDAS_TOTALES, VIDAS_TOTALES - partida.intentos));
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-12 md:py-16">
@@ -129,7 +139,7 @@ export default function GamePage() {
       {/* ---------- Panel del juego ---------- */}
       <div className="rounded-2xl border border-[#232b45] bg-[#0a0e1a] p-6 md:p-8">
         {/* Cabecera del panel */}
-        <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-col gap-0.5">
             <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-[#8b93b8]">
               Palabra en juego
@@ -167,29 +177,38 @@ export default function GamePage() {
           </div>
         </div>
 
-        {/* Palabra */}
-        <div className="flex flex-wrap justify-center gap-2.5 py-7 md:gap-3.5">
-          {casillas.map((c, i) => {
-            const revelada = c !== "_";
-            return (
-              <span
-                key={i}
-                className={`flex h-[58px] w-[44px] items-center justify-center rounded-t-lg font-mono text-[26px] font-extrabold md:h-[62px] md:w-[52px] md:text-[30px] ${
-                  revelada
-                    ? "border-b-[3px] border-[#22d3b8] bg-[#12172a] text-white"
-                    : "border-b-[3px] border-[#2a3355] bg-[#0d1220] text-transparent"
-                }`}
-              >
-                {revelada ? c : "·"}
-              </span>
-            );
-          })}
+        {/* Muñeco + palabra */}
+        <div className="flex flex-col items-center gap-6 py-4 md:flex-row md:items-center md:justify-center md:gap-10">
+          <div className="flex flex-col items-center gap-2">
+            <Muneco errores={errores} gano={partida.estado === "gano"} />
+            <span className="text-center text-[12.5px] text-[#8b93b8]">
+              {partida.estado === "gano" ? "¡Se salvó!" : ESTADOS_MUNECO[errores]}
+            </span>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-2.5 md:gap-3">
+            {casillas.map((c, i) => {
+              const revelada = c !== "_";
+              return (
+                <span
+                  key={i}
+                  className={`flex h-[58px] w-[44px] items-center justify-center rounded-t-lg font-mono text-[26px] font-extrabold transition-colors md:h-[62px] md:w-[52px] md:text-[30px] ${
+                    revelada
+                      ? "border-b-[3px] border-[#22d3b8] bg-[#12172a] text-white"
+                      : "border-b-[3px] border-[#2a3355] bg-[#0d1220] text-transparent"
+                  }`}
+                >
+                  {revelada ? c : "·"}
+                </span>
+              );
+            })}
+          </div>
         </div>
 
         {/* Fin de partida */}
         {partida.estado !== "jugando" && (
           <div
-            className={`mb-6 rounded-2xl border py-6 text-center ${
+            className={`my-6 rounded-2xl border py-6 text-center ${
               partida.estado === "gano"
                 ? "border-[#22d3b8]/40 bg-[#22d3b8]/10"
                 : "border-red-500/40 bg-red-500/10"
@@ -219,7 +238,7 @@ export default function GamePage() {
         )}
 
         {/* Teclado */}
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
           {ALFABETO.map((letra) => {
             const ok = acertada(letra);
             const mal = fallada(letra);
@@ -271,6 +290,117 @@ export default function GamePage() {
         .
       </p>
     </section>
+  );
+}
+
+/* ---------------- El muñeco ---------------- */
+
+function Muneco({ errores, gano }: { errores: number; gano: boolean }) {
+  const muerto = errores >= 4 && !gano;
+
+  // El color se va calentando con cada fallo.
+  const color = gano ? "#22d3b8" : muerto ? "#f87171" : errores >= 3 ? "#ffb020" : "#22d3b8";
+  const relleno = muerto
+    ? "rgba(248,113,113,0.18)"
+    : !gano && errores >= 3
+    ? "rgba(255,176,32,0.18)"
+    : "rgba(34,211,184,0.18)";
+
+  // Al ganar siempre se muestra la cabeza, aunque no haya habido fallos.
+  const hayCabeza = errores >= 1 || gano;
+
+  return (
+    <svg
+      viewBox="0 0 150 190"
+      className="h-[186px] w-[147px] shrink-0 md:h-[200px] md:w-[158px]"
+      role="img"
+      aria-label={gano ? "El personaje se salvó" : `Personaje del ahorcado con ${errores} de 4 fallos`}
+    >
+      {/* Horca */}
+      <g stroke="#2a3355" strokeWidth="7" strokeLinecap="round" fill="none">
+        <path d="M12 178 H92" />
+        <path d="M32 178 V14" />
+        <path d="M32 14 H98" />
+        <path d="M98 14 V30" />
+      </g>
+
+      {/* 3 · brazos (detrás del cuerpo) */}
+      {errores >= 3 && (
+        <g fill={relleno} stroke={color} strokeWidth="2.8">
+          <rect x="70" y="69" width="11" height="24" rx="5.5" />
+          <rect x="115" y="69" width="11" height="24" rx="5.5" />
+        </g>
+      )}
+
+      {/* 4 · piernas */}
+      {errores >= 4 && (
+        <g fill={relleno} stroke={color} strokeWidth="2.8">
+          <rect x="86" y="100" width="11" height="26" rx="5.5" />
+          <rect x="100" y="100" width="11" height="26" rx="5.5" />
+        </g>
+      )}
+
+      {/* 2 · cuerpo */}
+      {errores >= 2 && (
+        <rect
+          x="84"
+          y="64"
+          width="28"
+          height="36"
+          rx="11"
+          fill={relleno}
+          stroke={color}
+          strokeWidth="3.2"
+        />
+      )}
+
+      {/* 1 · cabeza y cara */}
+      {hayCabeza && (
+        <>
+          <rect
+            x="80"
+            y="30"
+            width="36"
+            height="34"
+            rx="12"
+            fill="#12172a"
+            stroke={color}
+            strokeWidth="3.5"
+          />
+
+          {muerto ? (
+            <g stroke={color} strokeLinecap="round" fill="none">
+              <path d="M85 41 l7 7 M92 41 l-7 7" strokeWidth="3" />
+              <path d="M102 41 l7 7 M109 41 l-7 7" strokeWidth="3" />
+              <path d="M92 57 q6 6 12 0" strokeWidth="2.8" />
+              <path d="M96 59 v6" strokeWidth="2.8" />
+            </g>
+          ) : (
+            <>
+              <circle cx="90" cy="45" r="4.6" fill="#ffffff" />
+              <circle cx="90" cy="46" r="2.2" fill="#0a0e1a" />
+              <circle cx="106" cy="45" r="4.6" fill="#ffffff" />
+              <circle cx="106" cy="46" r="2.2" fill="#0a0e1a" />
+              <path
+                d={
+                  gano
+                    ? "M92 56 q6 7 12 0"
+                    : errores >= 3
+                    ? "M92 59 q6 -5 12 0"
+                    : errores === 2
+                    ? "M92 57 h12"
+                    : "M92 56 q6 4 12 0"
+                }
+                stroke={color}
+                strokeWidth="2.8"
+                strokeLinecap="round"
+                fill="none"
+              />
+            </>
+          )}
+        </>
+      )}
+    </svg>
   );
 }
 
