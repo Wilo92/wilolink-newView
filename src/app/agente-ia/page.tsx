@@ -3,7 +3,15 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ShieldCheck, Layers, Send, Loader2, Info, AlertTriangle } from "lucide-react";
+import {
+  ShieldCheck,
+  Layers,
+  Send,
+  Loader2,
+  Info,
+  AlertTriangle,
+  MessageSquare,
+} from "lucide-react";
 
 // Misma variable de entorno que ya tienes configurada en Vercel.
 const API_URL = process.env.NEXT_PUBLIC_AGENTE_API_URL || "http://localhost:8000";
@@ -16,21 +24,28 @@ const SUGERENCIAS = [
 
 const PASOS = [
   {
-    n: "01",
+    icono: MessageSquare,
     titulo: "Escribes tu pregunta",
     texto: "En palabras normales. No hace falta saber de programación ni usar términos técnicos.",
   },
   {
-    n: "02",
-    titulo: "Se revisan los riesgos",
-    texto: "El primer especialista señala qué puede salir mal y qué conviene proteger desde el inicio.",
+    icono: ShieldCheck,
+    titulo: "Analisis de seguridad informatica",
+    texto:
+      "El primer especialista señala qué puede salir mal y qué conviene proteger desde el inicio.",
   },
   {
-    n: "03",
-    titulo: "Llega la propuesta",
+    icono: Layers,
+    titulo: "Analisis de desarrollo de software",
     texto: "El segundo parte de ese análisis y plantea cómo construirlo, paso por paso.",
   },
 ];
+
+const STACK = ["FastAPI", "LangGraph", "Gemini 2.5 Flash", "Next.js", "Railway", "Vercel"];
+
+const WHATSAPP =
+  "https://wa.me/573003553762?text=" +
+  encodeURIComponent("Hola Wilo, vengo de wilolink.com y quiero hablar sobre un proyecto.");
 
 type Respuesta = {
   user: string;
@@ -101,37 +116,46 @@ export default function AgenteIAPage() {
     <section className="mx-auto max-w-5xl px-4 py-12 md:py-16">
       {/* ---------- Encabezado ---------- */}
       <div className="mb-10 flex flex-col gap-4">
-        <div className="flex items-center gap-2.5">
-          <span className="h-[7px] w-[7px] rounded-full bg-[#22d3b8]" />
-          <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-[#22d3b8]">
-            Demostración en vivo
-          </span>
-        </div>
-
         <h1 className="text-3xl font-extrabold leading-tight text-white md:text-[42px]">
-          Dos especialistas responden
-          <br className="hidden md:block" /> la misma pregunta
+          Seguridad y Desarrollo:
+          <br className="hidden md:block" /> Dos especialistas de IA en una sola respuesta
         </h1>
 
         <p className="max-w-2xl text-[16px] leading-relaxed text-[#b9c0dd] md:text-[17px]">
-          Escribe una duda o una idea sobre tecnología. Un especialista revisa qué riesgos tiene, y
-          otro propone cómo construirla. Cada uno responde por separado, y el segundo trabaja sobre
-          lo que encontró el primero.
+          Pregunta lo que quieras sobre tecnología. Te responden dos agentes de IA expertos en seguridad
+          informática y desarrollo de software.
         </p>
+
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-[#5b6488]">
+            Hecho con
+          </span>
+          {STACK.map((t) => (
+            <span
+              key={t}
+              className="rounded-md border border-[#232b45] bg-[#0d1220] px-2.5 py-1 text-[11.5px] font-medium text-[#8b93b8]"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* ---------- Los tres pasos ---------- */}
       <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {PASOS.map((paso) => (
-          <div
-            key={paso.n}
-            className="flex flex-col gap-2.5 rounded-2xl border border-[#232b45] bg-[#0d1220] p-5"
-          >
-            <span className="text-[13px] font-bold text-[#4b5578]">{paso.n}</span>
-            <h2 className="text-[16px] font-bold text-white">{paso.titulo}</h2>
-            <p className="text-[14px] leading-relaxed text-[#9aa3c6]">{paso.texto}</p>
-          </div>
-        ))}
+        {PASOS.map((paso) => {
+          const Icono = paso.icono;
+          return (
+            <div
+              key={paso.titulo}
+              className="flex flex-col gap-2.5 rounded-2xl border border-[#232b45] bg-[#0d1220] p-5"
+            >
+              <Icono className="h-[18px] w-[18px] text-[#4b5578]" />
+              <h2 className="text-[16px] font-bold text-white">{paso.titulo}</h2>
+              <p className="text-[14px] leading-relaxed text-[#9aa3c6]">{paso.texto}</p>
+            </div>
+          );
+        })}
       </div>
 
       {/* ---------- Panel de conversación ---------- */}
@@ -140,12 +164,12 @@ export default function AgenteIAPage() {
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-[17px] w-[17px] text-[#22d3b8]" />
-              <span className="text-sm font-bold text-[#22d3b8]">Seguridad</span>
+              <span className="text-sm font-bold text-[#22d3b8]">Seguridad Informatica</span>
             </div>
             <span className="h-[18px] w-px bg-[#2a3355]" />
             <div className="flex items-center gap-2">
               <Layers className="h-[17px] w-[17px] text-[#ffb020]" />
-              <span className="text-sm font-bold text-[#ffb020]">Arquitectura</span>
+              <span className="text-sm font-bold text-[#ffb020]">Desarrollo de Software</span>
             </div>
           </div>
           {isLoading ? (
@@ -240,7 +264,9 @@ export default function AgenteIAPage() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder={
-              isLoading ? "Los especialistas están pensando…" : "Describe tu idea o escribe tu pregunta…"
+              isLoading
+                ? "Los especialistas están pensando…"
+                : "Describe tu idea o escribe tu pregunta…"
             }
             disabled={isLoading}
             className="flex-1 rounded-xl border border-[#2a3355] bg-[#12172a] px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-[#6b7280] focus:border-[#22d3b8] disabled:opacity-60"
@@ -269,7 +295,12 @@ export default function AgenteIAPage() {
         <p className="text-[13.5px] leading-relaxed text-[#e0c48a]">
           Las respuestas las genera un modelo de inteligencia artificial. Sirven como punto de
           partida para orientarte, no como una asesoría definitiva. Si tu proyecto es serio,{" "}
-          <a href="/contacto" className="font-semibold text-[#ffb020] underline underline-offset-2">
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[#ffb020] underline underline-offset-2"
+          >
             hablemos directamente
           </a>
           .
@@ -296,10 +327,7 @@ function Tarjeta({
     <div className="rounded-2xl border border-[#232b45] bg-[#12172a] p-4">
       <div className="mb-3 flex items-center gap-2">
         {icono}
-        <span
-          className="text-[11.5px] font-bold uppercase tracking-[0.1em]"
-          style={{ color }}
-        >
+        <span className="text-[11.5px] font-bold uppercase tracking-[0.1em]" style={{ color }}>
           {titulo}
         </span>
       </div>
