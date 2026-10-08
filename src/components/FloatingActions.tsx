@@ -4,26 +4,36 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus, X } from "lucide-react";
 
-// TODO: reemplaza por tu número real, formato internacional sin + ni espacios (ej. 573001234567)
 const WHATSAPP_NUMBER = "573003553762";
-const WHATSAPP_MESSAGE = "Hola, vi tu sitio WiloLink y quiero saber más sobre tus servicios.";
+const WHATSAPP_MESSAGE =
+  "Hola, vi tu sitio WiloLink y quiero saber más sobre tus servicios.";
 
-// TODO: reemplaza por tu link corto de reseña de Google Business
-// (se genera en Google Business Profile, no es la URL normal de tu ficha)
-const GOOGLE_REVIEW_URL = "https://g.page/r/TU-ID-AQUI/review";
+const GOOGLE_REVIEW_URL = "https://g.page/r/CbG2kiJ9wR2fEBM/review";
 
 const OPTIONS = [
   {
     key: "google",
-    label: "¿Te ayudamos? Cuéntalo ★",
+    label: "¿Te ayudamos? Deja una reseña ★",
     href: GOOGLE_REVIEW_URL,
     bg: "bg-white",
     icon: (
       <svg viewBox="0 0 24 24" className="h-5 w-5">
-        <path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.6z" />
-        <path fill="#34A853" d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7C4.4 19.8 7.9 22 12 22z" />
-        <path fill="#FBBC05" d="M6.2 13.6c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.9H2.7C1.9 8.4 1.5 10.1 1.5 12s.4 3.6 1.2 5.1z" />
-        <path fill="#EA4335" d="M12 5.6c1.5 0 2.9.5 4 1.5l3-3C17.2 2.3 14.8 1.4 12 1.4 7.9 1.4 4.4 3.6 2.7 6.9l3.5 2.7c.8-2.5 3.1-4 5.8-4z" />
+        <path
+          fill="#4285F4"
+          d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.6z"
+        />
+        <path
+          fill="#34A853"
+          d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7C4.4 19.8 7.9 22 12 22z"
+        />
+        <path
+          fill="#FBBC05"
+          d="M6.2 13.6c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.9H2.7C1.9 8.4 1.5 10.1 1.5 12s.4 3.6 1.2 5.1z"
+        />
+        <path
+          fill="#EA4335"
+          d="M12 5.6c1.5 0 2.9.5 4 1.5l3-3C17.2 2.3 14.8 1.4 12 1.4 7.9 1.4 4.4 3.6 2.7 6.9l3.5 2.7c.8-2.5 3.1-4 5.8-4z"
+        />
       </svg>
     ),
   },
@@ -64,7 +74,10 @@ export default function FloatingActions() {
   }, [open]);
 
   return (
-    <div ref={wrapRef} className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div
+      ref={wrapRef}
+      className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3"
+    >
       <AnimatePresence>
         {open &&
           OPTIONS.map((opt, i) => (
@@ -98,7 +111,9 @@ export default function FloatingActions() {
         <button
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          aria-label={open ? "Cerrar opciones de contacto" : "Abrir opciones de contacto"}
+          aria-label={
+            open ? "Cerrar opciones de contacto" : "Abrir opciones de contacto"
+          }
           className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#ff9a3d] text-[#1a1206] shadow-lg transition-transform hover:scale-105 active:scale-95"
         >
           {open ? <X size={22} /> : <Plus size={22} />}

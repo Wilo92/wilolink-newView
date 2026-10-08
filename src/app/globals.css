@@ -25,7 +25,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Marquee del carrusel de tecnologías */
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -43,8 +43,6 @@ body {
 .marquee-group:hover .animate-marquee {
   animation-play-state: paused;
 }
-
-
 
 .custom-cursor-active,
 .custom-cursor-active * {

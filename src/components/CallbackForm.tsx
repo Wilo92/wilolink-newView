@@ -63,7 +63,6 @@ export default function CallbackForm() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Escribe tu alias"
               className="mb-3.5 w-full border-b border-[#232b45] bg-transparent pb-1.5 font-sans text-[15px] text-white outline-none focus:border-[#22d3b8]"
             />
 
@@ -75,7 +74,6 @@ export default function CallbackForm() {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Ej: 300 123 4567"
               className="mb-3.5 w-full border-b border-[#232b45] bg-transparent pb-1.5 font-sans text-[15px] text-white outline-none focus:border-[#22d3b8]"
             />
 
@@ -87,7 +85,6 @@ export default function CallbackForm() {
               rows={3}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Ej: se me dañó la pantalla de mi laptop y quiero saber si la pueden reparar..."
               className="mb-3.5 w-full resize-none border-b border-[#232b45] bg-transparent pb-1.5 font-sans text-[15px] text-white outline-none focus:border-[#22d3b8]"
             />
 
@@ -95,7 +92,7 @@ export default function CallbackForm() {
               type="submit"
               className="mt-2 w-full rounded-md bg-[#22d3b8] py-2.5 text-center font-sans font-bold text-[#062119] transition-transform hover:scale-[1.02]"
             >
-              Enviar por WhatsApp →
+              Contactar por WhatsApp →
             </button>
           </form>
         )}

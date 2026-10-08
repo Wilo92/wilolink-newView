@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 import CustomCursor from "@/components/CustomCursor";
+import CircuitBackground from "@/components/CircuitBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "WiloLink | Mantenimiento, redes y desarrollo web en Dosquebradas, pereira  , risaralda, colombia",
+    default:
+      "WiloLink | Mantenimiento, redes y desarrollo web en Dosquebradas, pereira  , risaralda, colombia",
     template: "%s | WiloLink",
   },
 

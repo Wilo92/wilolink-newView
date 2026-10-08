@@ -6,25 +6,25 @@ import { motion, type Variants } from "framer-motion";
 const SERVICES = [
   {
     title: "Mantenimiento preventivo / correctivo",
-    desc: "Diagnóstico, limpieza y reparación de laptops, computadores de escritorio y dispositivos móviles. Mantenimiento preventivo para evitar fallas y corrección de problemas de hardware o software.",
+    desc: "Diagnóstico, mantenimiento preventivo y correctivo para laptops y computadores de escritorio. Solucionamos fallas de hardware y software, realizamos actualizaciones e instalación de aplicaciones para garantizar un funcionamiento óptimo.",
     accent: "#22d3b8",
     image: "/services/mantenimiento.jpg",
   },
   {
     title: "Enseñanza",
-    desc: "Clases de informática básica para adultos, niños y personas sin experiencia técnica. Manejo del computador, internet, herramientas ofimáticas y uso seguro de la tecnología.",
+    desc: "Clases dirigidas a personas de diferentes profesiones y niveles de experiencia, incluso sin conocimientos previos. Aprende a manejar el computador, internet, herramientas ofimáticas y otras tecnologías de forma práctica y segura.",
     accent: "#ffb020",
     image: "/services/ensenanza.jpg",
   },
   {
     title: "Redes",
-    desc: "Instalación y administración de redes empresariales o domésticas: configuración de routers, cableado estructurado y cámaras de seguridad.",
+    desc: "Diseño, instalación y configuración de redes para hogares y empresas. Configuración de routers, redes Wi-Fi, conexión de dispositivos, puntos de red y sistemas de cámaras de seguridad.",
     accent: "#22d3b8",
     image: "/services/redes.jpg",
   },
   {
     title: "Desarrollo a la medida",
-    desc: "Diseño y desarrollo de sitios web y sistemas de información adaptados a tu negocio, desde landing pages hasta plataformas completas con bases de datos y paneles administrativos.",
+    desc: "Diseño y desarrollo de sitios web, aplicaciones y sistemas de información personalizados para cada negocio. Desde landing pages y sitios corporativos hasta plataformas completas con bases de datos, autenticación y paneles administrativos.",
     accent: "#ffb020",
     image: "/services/desarrollo.jpg",
   },
@@ -62,7 +62,7 @@ type NodeType = {
 };
 
 function useMeshBackground(
-  canvasRef: React.RefObject<HTMLCanvasElement | null>
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
 ) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -99,10 +99,7 @@ function useMeshBackground(
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(
-        MAX_NODES,
-        Math.round((width * height) / 15000)
-      );
+      const count = Math.min(MAX_NODES, Math.round((width * height) / 15000));
 
       nodes = Array.from({ length: count }, () => ({
         x: Math.random() * width,
@@ -184,11 +181,11 @@ export default function Services() {
 
         <div className="relative z-10">
           <p className="mb-3 text-xs font-bold tracking-[0.08em] text-[#ffb020]">
-            LO QUE HACEMOS
+            LO QUE SABEMOS HACER
           </p>
 
           <h2 className="max-w-xs text-3xl font-extrabold leading-tight text-white">
-            Un aliado técnico para todo lo que necesitas
+            Somo tu aliado técnico para todo lo que necesites.
           </h2>
         </div>
       </div>

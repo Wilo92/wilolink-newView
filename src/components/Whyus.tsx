@@ -6,25 +6,21 @@ const REASONS = [
   {
     icon: "⚡",
     title: "Respuesta rápida",
-    desc: "Te respondo el mismo día. Nada de esperar semanas para saber si tu proyecto es viable.",
     color: "#22d3b8",
   },
   {
     icon: "🛠️",
     title: "Garantía en el servicio",
-    desc: "Si algo no queda bien, lo corrijo sin costo adicional. Tu tranquilidad es parte del trabajo.",
     color: "#ffb020",
   },
   {
     icon: "🎯",
     title: "Atención personalizada",
-    desc: "Trabajas directo conmigo, sin intermediarios ni call centers. Una sola persona, un solo contacto.",
     color: "#22d3b8",
   },
   {
     icon: "💬",
     title: "Precios claros y justos",
-    desc: "Sabes cuánto vas a pagar antes de empezar. Sin sorpresas ni cobros ocultos al final.",
     color: "#ffb020",
   },
 ] as const;
@@ -36,12 +32,16 @@ const containerVariants: Variants = {
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
 
 export default function WhyUs() {
   return (
-    <section className="grid grid-cols-1 overflow-hidden bg-[#0a0e1a] md:min-h-[518px] md:grid-cols-[1.3fr_1fr]">
+    <section className="grid grid-cols-1 overflow-hidden bg-[#0a0e1a]  md:grid-cols-[1.3fr_1fr]">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -53,21 +53,20 @@ export default function WhyUs() {
           <motion.div
             key={reason.title}
             variants={cardVariants}
-            className="flex flex-col justify-center border-t-[3px] bg-[#0e1223] p-8"
+            className="flex min-h-[180px] flex-col items-center justify-center border-t-[3px] bg-[#0e1223] p-8 text-center"
             style={{ borderTopColor: reason.color }}
           >
             <div
               className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg text-xl"
-              style={{ backgroundColor: `${reason.color}1f`, color: reason.color }}
+              style={{
+                backgroundColor: `${reason.color}1f`,
+                color: reason.color,
+              }}
             >
               {reason.icon}
             </div>
-            <h3 className="mb-2 text-base font-bold text-white">
-              {reason.title}
-            </h3>
-            <p className="text-sm leading-relaxed text-[#9aa3c9]">
-              {reason.desc}
-            </p>
+
+            <h3 className="text-base font-bold text-white">{reason.title}</h3>
           </motion.div>
         ))}
       </motion.div>
@@ -79,10 +78,6 @@ export default function WhyUs() {
           <div className="absolute left-[40%] top-[55%] h-1 w-1 rounded-full bg-white" />
           <div className="absolute left-[80%] top-[70%] h-1 w-1 rounded-full bg-white" />
           <div className="absolute left-[25%] top-[80%] h-1 w-1 rounded-full bg-white" />
-        </div>
-
-        <div className="relative z-10 mb-5 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#5eead4]">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#5eead4]" />
         </div>
 
         <p className="relative z-10 mb-3 text-xs font-bold tracking-wide text-[#ffb020]">

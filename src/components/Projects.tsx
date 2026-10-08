@@ -21,7 +21,8 @@ const PROJECTS: Project[] = [
   {
     name: "Odontología Pereira AGB",
     category: "Sitio web corporativo",
-    description: "Página orientada a la captación de pacientes y presencia digital.",
+    description:
+      "Página orientada a la captación de pacientes y presencia digital en servicios de odontologia.",
     url: "https://www.odontologiapereiraagb.com",
     urlLabel: "odontologiapereiraagb.com",
     media: { type: "image", src: "/proyectos/agb.png" },
@@ -29,7 +30,8 @@ const PROJECTS: Project[] = [
   {
     name: "Crediorbit",
     category: "Plataforma financiera",
-    description: "Desarrollo web enfocado en servicios financieros.",
+    description:
+      "Desarrollo web enfocado en servicios financieros de prestamo de dinero y fiados.",
     url: "https://www.crediorbit.com",
     urlLabel: "crediorbit.com",
     media: { type: "image", src: "/proyectos/credi.png" },
@@ -37,15 +39,16 @@ const PROJECTS: Project[] = [
   {
     name: "Intranet Contraloría Risaralda",
     category: "Sistema empresarial",
-    description: "Herramienta interna para gestión y administración institucional.",
+    description:
+      "Herramienta interna para gestión y administración institucional.",
     url: "https://intranet-contraloria-2026.vercel.app/",
     urlLabel: "Ver proyecto",
     media: { type: "image", src: "/proyectos/contra.png" },
   },
   {
     name: "Feconder",
-    category: "Portal institucional",
-    description: "Sitio web informativo para organización regional.",
+    category: "Sitio web corporativo",
+    description: "Sitio web para una cooperativa de ahorro y creditos.",
     url: "https://feconder.github.io/",
     urlLabel: "Ver proyecto",
     media: { type: "image", src: "/proyectos/feconder.png" },
@@ -53,7 +56,8 @@ const PROJECTS: Project[] = [
   {
     name: "Análisis de Contratación Pública",
     category: "Dashboard de datos",
-    description: "Visualización y análisis interactivo de información pública.",
+    description:
+      "Proceso ETL para la integración, transformación y visualización interactiva de información pública, orientado al análisis de la contratación pública.",
     url: "https://contraloria-risaralda.streamlit.app/",
     urlLabel: "Ver demo",
     media: { type: "video", src: "/proyectos/video.mp4" },
@@ -104,8 +108,6 @@ export default function Projects() {
       <div className="mx-auto max-w-6xl">
         {/* Encabezado */}
         <div className="mb-12 text-center">
-        
-
           <h2 className="mt-4 text-3xl font-extrabold text-white md:text-4xl">
             Proyectos desarrollados para nuestros clientes
           </h2>
@@ -196,14 +198,9 @@ export default function Projects() {
           </button>
         </div>
 
-
         {/* Tecnologías y capacidades */}
         <div className="mt-14 rounded-2xl border border-[#1f2a44] bg-[#111827] p-8 md:p-10">
           <div className="text-center">
-            <span className="inline-block rounded-full border border-[#22d3b8]/30 bg-[#22d3b8]/10 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#5eead4]">
-              Tecnologías y herramientas
-            </span>
-
             <h3 className="mt-4 text-2xl font-bold text-white md:text-3xl">
               Soluciones desarrolladas con tecnologías modernas
             </h3>
@@ -215,8 +212,6 @@ export default function Projects() {
             </p>
           </div>
 
-          
-
           <div className="mt-12">
             <h4 className="mb-5 text-center text-sm font-semibold uppercase tracking-wider text-[#9aa3c9]">
               Stack tecnológico
@@ -224,31 +219,36 @@ export default function Projects() {
 
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                "Next.js",
-                "React",
-                "TypeScript",
-                "JavaScript",
-                "Node.js",
-                "Python",
-                "FastAPI",
-                "PostgreSQL",
-                "MySQL",
-                "MongoDB",
-                "Tailwind CSS",
-                "Docker",
-                "Git",
-                "GitHub",
-                "Vercel",
-                "Streamlit",
-                "Railway",
-                "Wordpress"
+                { name: "Next.js", url: "https://nextjs.org/" },
+                { name: "React", url: "https://react.dev/" },
+                { name: "TypeScript", url: "https://www.typescriptlang.org/" },
+                { name: "FastAPI", url: "https://fastapi.tiangolo.com/" },
+                { name: "Laravel", url: "https://laravel.com/" },
+                { name: "PostgreSQL", url: "https://www.postgresql.org/" },
+                { name: "Supabase", url: "https://supabase.com/" },
+                { name: "MongoDB", url: "https://www.mongodb.com/" },
+                { name: "Docker", url: "https://www.docker.com/" },
+                { name: "Git", url: "https://git-scm.com/" },
+                { name: "GitHub", url: "https://github.com/" },
+                { name: "Vercel", url: "https://vercel.com/" },
+                { name: "Streamlit", url: "https://streamlit.io/" },
+                { name: "Railway", url: "https://railway.com/" },
+                { name: "WordPress", url: "https://wordpress.org/" },
+                { name: "OpenCart", url: "https://www.opencart.com/" },
+                {
+                  name: "Power BI",
+                  url: "https://www.microsoft.com/es-co/power-platform/products/power-bi",
+                },
               ].map((tech) => (
-                <span
-                  key={tech}
-                  className="rounded-full border border-[#22d3b8]/20 bg-[#22d3b8]/10 px-4 py-2 text-sm font-medium text-[#5eead4]"
+                <a
+                  key={tech.name}
+                  href={tech.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-[#22d3b8]/20 bg-[#22d3b8]/10 px-4 py-2 text-sm font-medium text-[#5eead4] transition hover:border-[#22d3b8]/50 hover:bg-[#22d3b8]/20"
                 >
-                  {tech}
-                </span>
+                  {tech.name}
+                </a>
               ))}
             </div>
           </div>
