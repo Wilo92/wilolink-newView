@@ -13,11 +13,6 @@ const API_BASE = `${FASTAPI_URL}/api/v1/ahorcado`;
 const ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 const VIDAS_TOTALES = 4;
 
-const PASOS = [
-  { titulo: "Elige una letra", texto: "Toca cualquiera del teclado de abajo." },
-  { titulo: "Si acierta, aparece", texto: "Si no está en la palabra, pierdes una vida." },
-  { titulo: "Complétala a tiempo", texto: "Descúbrela entera antes de quedarte sin vidas." },
-];
 
 const ESTADOS_MUNECO = [
   "Todavía no has fallado.",
@@ -124,17 +119,7 @@ export default function GamePage() {
       </div>
 
       {/* ---------- Cómo se juega ---------- */}
-      <div className="mb-9 grid grid-cols-1 gap-3.5 md:grid-cols-3">
-        {PASOS.map((paso) => (
-          <div
-            key={paso.titulo}
-            className="flex flex-col gap-1.5 rounded-2xl border border-[#232b45] bg-[#0d1220] px-5 py-4"
-          >
-            <h2 className="text-[15px] font-bold text-white">{paso.titulo}</h2>
-            <p className="text-[13.5px] leading-relaxed text-[#9aa3c6]">{paso.texto}</p>
-          </div>
-        ))}
-      </div>
+     
 
       {/* ---------- Panel del juego ---------- */}
       <div className="rounded-2xl border border-[#232b45] bg-[#0a0e1a] p-6 md:p-8">

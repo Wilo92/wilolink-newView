@@ -26,7 +26,6 @@ function useBogotaClock() {
   return time;
 }
 
-
 function getBogotaDate() {
   return new Intl.DateTimeFormat("es-CO", {
     timeZone: "America/Bogota",
@@ -71,7 +70,7 @@ function useBootTyping(lines: Line[]) {
 
 function StatsTerminal() {
   const time = useBogotaClock();
-  
+
   const date = getBogotaDate();
 
   const lines: Line[] = [
@@ -90,7 +89,7 @@ function StatsTerminal() {
 
   return (
     <div className="flex justify-center md:justify-start">
-      <div className="w-full max-w-md rounded-xl border border-[#2a3355] bg-black p-5 font-mono text-[13px] text-[#9aa3c9]">
+      <div className="w-full max-w-md overflow-x-auto rounded-xl border border-[#2a3355] bg-black p-4 font-mono text-xs text-[#9aa3c9] sm:p-5 sm:text-[13px]">
         <div className="mb-3 flex gap-1.5 border-b border-[#1c2340] pb-3">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
@@ -98,7 +97,7 @@ function StatsTerminal() {
         </div>
 
         {revealed.map((line, i) => (
-          <div key={i} className="min-h-[20px] whitespace-pre">
+          <div key={i} className="min-h-[20px] whitespace-pre-wrap break-all">
             {line.startsWith("$") ? (
               <span className="text-[#ffb020]">{line}</span>
             ) : (
@@ -111,13 +110,13 @@ function StatsTerminal() {
             y se actualiza cada segundo sin animación de tecleo (sería raro
             re-escribir la hora letra por letra 60 veces por minuto) */}
         {done && (
-          <div className="min-h-[20px] whitespace-pre">
+          <div className="min-h-[20px] whitespace-pre-wrap break-words">
             {"fecha-actual .......... "}
             <span className="text-[#ffb020]">{date}</span>
           </div>
         )}
         {done && (
-          <div className="min-h-[20px] whitespace-pre">
+          <div className="min-h-[20px] whitespace-pre-wrap break-words">
             {"hora-local ............ "}
             <span className="text-[#5eead4]">{time}</span>
           </div>
@@ -149,23 +148,32 @@ function ProcessTimeline() {
       </h2>
 
       {/* --- Versión mobile: vertical, con la línea a la izquierda --- */}
-      <div className="flex flex-col lg:hidden">
-        {STEPS.map((step, i) => (
-          <div key={step.num} className="relative flex gap-4 pb-8 last:pb-0">
-            {i < STEPS.length - 1 && (
-              <div className="absolute left-[17px] top-9 h-[calc(100%-8px)] w-0.5 bg-[#232b45]" />
-            )}
+      {/* --- Versión mobile: vertical y centrada --- */}
+      <div className="flex flex-col items-center lg:hidden">
+        <div className=" flex w-full max-w-xs flex-col items-center">
+          {STEPS.map((step, i) => (
             <div
-              className="z-10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
-              style={{ borderColor: step.color, color: step.color }}
+              key={step.num}
+              className="relative flex w-full flex-col items-center pb-8 last:pb-0"
             >
-              {step.num}
+              
+
+              <div
+                className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-[#0a0e1a] font-extrabold"
+                style={{
+                  borderColor: step.color,
+                  color: step.color,
+                }}
+              >
+                {step.num}
+              </div>
+
+              <div className="mt-2 text-center text-[15px] font-bold text-white">
+                {step.title}
+              </div>
             </div>
-            <div className="pt-1.5 text-[15px] font-bold text-white">
-              {step.title}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* --- Versión desktop: horizontal, con la línea arriba --- */}
@@ -192,7 +200,7 @@ function ProcessTimeline() {
 
 export default function StatsAndProcess() {
   return (
-    <section className="bg-[#0a0e1a] px-6 py-16 md:px-10 md:py-20">
+    <section className="flex min-h-screen items-center overflow-hidden bg-[#0a0e1a] px-4 py-12 sm:px-6 sm:py-16 md:min-h-0 md:px-10 md:py-20">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:items-center md:gap-10">
         <StatsTerminal />
         <ProcessTimeline />

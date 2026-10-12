@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 
 // Misma variable de entorno que ya tienes configurada en Vercel.
-const API_URL = process.env.NEXT_PUBLIC_AGENTE_API_URL || "http://localhost:8000";
+const API_URL =
+  process.env.NEXT_PUBLIC_AGENTE_API_URL || "http://localhost:8000";
 
 const SUGERENCIAS = [
   "¿Cómo protejo los datos de mis clientes?",
@@ -22,30 +23,20 @@ const SUGERENCIAS = [
   "¿Qué es una contraseña segura de verdad?",
 ];
 
-const PASOS = [
-  {
-    icono: MessageSquare,
-    titulo: "Escribes tu pregunta",
-    texto: "En palabras normales. No hace falta saber de programación ni usar términos técnicos.",
-  },
-  {
-    icono: ShieldCheck,
-    titulo: "Analisis de seguridad informatica",
-    texto:
-      "El primer especialista señala qué puede salir mal y qué conviene proteger desde el inicio.",
-  },
-  {
-    icono: Layers,
-    titulo: "Analisis de desarrollo de software",
-    texto: "El segundo parte de ese análisis y plantea cómo construirlo, paso por paso.",
-  },
+const STACK = [
+  "FastAPI",
+  "LangGraph",
+  "Gemini 2.5 Flash",
+  "Next.js",
+  "Railway",
+  "Vercel",
 ];
-
-const STACK = ["FastAPI", "LangGraph", "Gemini 2.5 Flash", "Next.js", "Railway", "Vercel"];
 
 const WHATSAPP =
   "https://wa.me/573003553762?text=" +
-  encodeURIComponent("Hola Wilo, vengo de wilolink.com y quiero hablar sobre un proyecto.");
+  encodeURIComponent(
+    "Hola Wilo, vengo de wilolink.com y quiero hablar sobre un proyecto.",
+  );
 
 type Respuesta = {
   user: string;
@@ -70,7 +61,10 @@ export default function AgenteIAPage() {
 
     setIsLoading(true);
     setPrompt("");
-    setRespuestas((prev) => [...prev, { user: consulta, agente1: null, agente2: null }]);
+    setRespuestas((prev) => [
+      ...prev,
+      { user: consulta, agente1: null, agente2: null },
+    ]);
 
     try {
       const response = await fetch(`${API_URL}/api/v1/agentes/consulta`, {
@@ -79,7 +73,8 @@ export default function AgenteIAPage() {
         body: JSON.stringify({ consulta }),
       });
 
-      if (!response.ok) throw new Error(`El servidor respondió ${response.status}`);
+      if (!response.ok)
+        throw new Error(`El servidor respondió ${response.status}`);
 
       const data = await response.json();
 
@@ -98,7 +93,8 @@ export default function AgenteIAPage() {
         const copia = [...prev];
         copia[copia.length - 1] = {
           ...copia[copia.length - 1],
-          error: "No pudimos conectar con los especialistas. Intenta de nuevo en un momento.",
+          error:
+            "No pudimos conectar con los especialistas. Intenta de nuevo en un momento.",
         };
         return copia;
       });
@@ -118,12 +114,13 @@ export default function AgenteIAPage() {
       <div className="mb-10 flex flex-col gap-4">
         <h1 className="text-3xl font-extrabold leading-tight text-white md:text-[42px]">
           Seguridad y Desarrollo:
-          <br className="hidden md:block" /> Dos especialistas de IA en una sola respuesta
+          <br className="hidden md:block" /> Dos especialistas de IA en una sola
+          respuesta
         </h1>
 
         <p className="max-w-2xl text-[16px] leading-relaxed text-[#b9c0dd] md:text-[17px]">
-          Pregunta lo que quieras sobre tecnología. Te responden dos agentes de IA expertos en seguridad
-          informática y desarrollo de software.
+          Plantea tu idea o duda técnica. Dos especialistas de IA la evaluarán al mismo tiempo para darte una visión clara en ciberseguridad y
+          desarrollo de software.
         </p>
 
         <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -142,21 +139,6 @@ export default function AgenteIAPage() {
       </div>
 
       {/* ---------- Los tres pasos ---------- */}
-      <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {PASOS.map((paso) => {
-          const Icono = paso.icono;
-          return (
-            <div
-              key={paso.titulo}
-              className="flex flex-col gap-2.5 rounded-2xl border border-[#232b45] bg-[#0d1220] p-5"
-            >
-              <Icono className="h-[18px] w-[18px] text-[#4b5578]" />
-              <h2 className="text-[16px] font-bold text-white">{paso.titulo}</h2>
-              <p className="text-[14px] leading-relaxed text-[#9aa3c6]">{paso.texto}</p>
-            </div>
-          );
-        })}
-      </div>
 
       {/* ---------- Panel de conversación ---------- */}
       <div className="overflow-hidden rounded-2xl border border-[#232b45] bg-[#0a0e1a]">
@@ -164,12 +146,16 @@ export default function AgenteIAPage() {
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-[17px] w-[17px] text-[#22d3b8]" />
-              <span className="text-sm font-bold text-[#22d3b8]">Seguridad Informatica</span>
+              <span className="text-sm font-bold text-[#22d3b8]">
+                Seguridad Informatica
+              </span>
             </div>
             <span className="h-[18px] w-px bg-[#2a3355]" />
             <div className="flex items-center gap-2">
               <Layers className="h-[17px] w-[17px] text-[#ffb020]" />
-              <span className="text-sm font-bold text-[#ffb020]">Desarrollo de Software</span>
+              <span className="text-sm font-bold text-[#ffb020]">
+                Desarrollo de Software
+              </span>
             </div>
           </div>
           {isLoading ? (
@@ -177,7 +163,9 @@ export default function AgenteIAPage() {
               <Loader2 className="h-3.5 w-3.5 animate-spin" /> Pensando…
             </span>
           ) : (
-            <span className="text-[12.5px] text-[#8b93b8]">La respuesta tarda unos segundos</span>
+            <span className="text-[12.5px] text-[#8b93b8]">
+              La respuesta tarda unos segundos
+            </span>
           )}
         </div>
 
@@ -205,18 +193,24 @@ export default function AgenteIAPage() {
                   {item.error ? (
                     <div className="flex items-start gap-2.5 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3">
                       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
-                      <p className="text-[13.5px] leading-relaxed text-red-300">{item.error}</p>
+                      <p className="text-[13.5px] leading-relaxed text-red-300">
+                        {item.error}
+                      </p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
                       <Tarjeta
-                        icono={<ShieldCheck className="h-[15px] w-[15px] text-[#22d3b8]" />}
+                        icono={
+                          <ShieldCheck className="h-[15px] w-[15px] text-[#22d3b8]" />
+                        }
                         titulo="Riesgos a cuidar"
                         color="#22d3b8"
                         contenido={item.agente1}
                       />
                       <Tarjeta
-                        icono={<Layers className="h-[15px] w-[15px] text-[#ffb020]" />}
+                        icono={
+                          <Layers className="h-[15px] w-[15px] text-[#ffb020]" />
+                        }
                         titulo="Cómo construirlo"
                         color="#ffb020"
                         contenido={item.agente2}
@@ -293,8 +287,9 @@ export default function AgenteIAPage() {
       <div className="mt-6 flex items-start gap-3 rounded-xl border border-[#ffb020]/30 bg-[#ffb020]/[0.07] px-4 py-3.5">
         <Info className="mt-0.5 h-[17px] w-[17px] shrink-0 text-[#ffb020]" />
         <p className="text-[13.5px] leading-relaxed text-[#e0c48a]">
-          Las respuestas las genera un modelo de inteligencia artificial. Sirven como punto de
-          partida para orientarte, no como una asesoría definitiva. Si tu proyecto es serio,{" "}
+          Las respuestas las genera un modelo de inteligencia artificial. Sirven
+          como punto de partida para orientarte, no como una asesoría
+          definitiva. Si tu proyecto es serio,{" "}
           <a
             href={WHATSAPP}
             target="_blank"
@@ -327,7 +322,10 @@ function Tarjeta({
     <div className="rounded-2xl border border-[#232b45] bg-[#12172a] p-4">
       <div className="mb-3 flex items-center gap-2">
         {icono}
-        <span className="text-[11.5px] font-bold uppercase tracking-[0.1em]" style={{ color }}>
+        <span
+          className="text-[11.5px] font-bold uppercase tracking-[0.1em]"
+          style={{ color }}
+        >
           {titulo}
         </span>
       </div>

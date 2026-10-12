@@ -76,7 +76,7 @@ export default function FloatingActions() {
   return (
     <div
       ref={wrapRef}
-      className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3"
+      className="fixed bottom-4 right-4 z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-3 sm:bottom-5 sm:right-5"
     >
       <AnimatePresence>
         {open &&
@@ -92,7 +92,7 @@ export default function FloatingActions() {
               transition={{ duration: 0.15, delay: i * 0.04 }}
               className="flex items-center gap-2.5"
             >
-              <span className="rounded-lg border border-[#2a3355] bg-[#171d33] px-3 py-1.5 text-xs font-medium text-[#e8e4ff] shadow-lg">
+              <span className="max-w-[calc(100vw-6rem)] truncate rounded-lg border border-[#2a3355] bg-[#171d33] px-3 py-1.5 text-xs font-medium text-[#e8e4ff] shadow-lg">
                 {opt.label}
               </span>
               <span
