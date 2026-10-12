@@ -1,24 +1,25 @@
-// src/components/WelcomeSplash.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Oswald, Sacramento, Montserrat } from "next/font/google";
-import Image from 'next/image';
 
 const oswald = Oswald({ subsets: ["latin"], weight: ["400", "500"] });
 const sacramento = Sacramento({ subsets: ["latin"], weight: "400" });
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["500", "600"], style: "italic" });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  style: "italic",
+});
 
 const SERVICES = [
-  "Mantenimiento preventivo y correctivo laptop's, pc de escritorio, servidores, celulares.",
+  "Mantenimiento preventivo y correctivo laptop's, pc de escritorio, servidores",
   "Asesoria y consultoria tecnica",
   "Enseñanza en informática básica para adultos, niños y personas no tecnicas.",
   "Servicios de administración de redes empresariales o locales",
   "Desarrollo de sitios web y sistemas de información a la medida.",
 ];
 
-// Mismo mesh gradient para ambas caras.
 const MESH =
   "radial-gradient(ellipse 42% 55% at 4% 22%, #A428F0 0%, transparent 62%)," +
   "radial-gradient(ellipse 34% 48% at 6% 62%, #7A1BB5 0%, transparent 66%)," +
@@ -27,7 +28,6 @@ const MESH =
   "radial-gradient(ellipse 30% 34% at 66% 58%, #2B5FC4 0%, transparent 70%)," +
   "#08080f";
 
-// Estilo base compartido por las dos caras de la tarjeta.
 const face: React.CSSProperties = {
   position: "absolute",
   inset: 0,
@@ -38,7 +38,20 @@ const face: React.CSSProperties = {
   background: MESH,
 };
 
-// Trama de puntos decorativa reutilizable.
+const emptySubscribe = () => () => {};
+
+function getSplashSnapshot(): boolean {
+  try {
+    return !sessionStorage.getItem("wilolink-splash");
+  } catch {
+    return true;
+  }
+}
+
+function getServerSnapshot(): boolean {
+  return false;
+}
+
 function Dots({
   left,
   top,
@@ -76,14 +89,28 @@ function Dots({
 }
 
 export default function WelcomeSplash() {
-  const [visible, setVisible] = useState(true);
+  const shouldShow = useSyncExternalStore(
+    emptySubscribe,
+    getSplashSnapshot,
+    getServerSnapshot,
+  );
+
+  const [dismissed, setDismissed] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [exiting, setExiting] = useState(false);
 
+  const visible = shouldShow && !dismissed;
+
   function handleContinue() {
     setExiting(true);
-    // Debe coincidir con la duración del zoom de salida (0.5s).
-    setTimeout(() => setVisible(false), 500);
+
+    try {
+      sessionStorage.setItem("wilolink-splash", "1");
+    } catch {}
+
+    setTimeout(() => {
+      setDismissed(true);
+    }, 500);
   }
 
   return (
@@ -109,13 +136,14 @@ export default function WelcomeSplash() {
           {/* Entrada: fade + scale in. Salida: zoom hacia adentro. */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
-            animate={exiting ? { opacity: 0, scale: 2.2 } : { opacity: 1, scale: 1 }}
+            animate={
+              exiting ? { opacity: 0, scale: 2.2 } : { opacity: 1, scale: 1 }
+            }
             transition={{ duration: exiting ? 0.5 : 0.45, ease: "easeOut" }}
             style={{
               perspective: 1400,
               width: "clamp(320px, 62vw, 720px)",
               aspectRatio: "1003 / 590",
-              // Permite que las tipografías escalen con la tarjeta usando cqw.
               containerType: "inline-size",
             }}
           >
@@ -133,10 +161,41 @@ export default function WelcomeSplash() {
             >
               {/* ---------- FRENTE ---------- */}
               <div style={face}>
-                <Dots left="29%" top="1%" width="24%" height="12%" color="#6f7385" opacity={0.85} />
-                <Dots left="40%" top="24%" width="9%" height="6%" color="#cfd6e6" size={20} gapY={12} opacity={0.9} />
-                <Dots left="1%" top="52%" width="19%" height="33%" opacity={0.55} />
-                <Dots left="14%" top="85%" width="8%" height="5%" color="#cfd6e6" size={19} gapY={12} opacity={0.9} />
+                <Dots
+                  left="29%"
+                  top="1%"
+                  width="24%"
+                  height="12%"
+                  color="#6f7385"
+                  opacity={0.85}
+                />
+                <Dots
+                  left="40%"
+                  top="24%"
+                  width="9%"
+                  height="6%"
+                  color="#cfd6e6"
+                  size={20}
+                  gapY={12}
+                  opacity={0.9}
+                />
+                <Dots
+                  left="1%"
+                  top="52%"
+                  width="19%"
+                  height="33%"
+                  opacity={0.55}
+                />
+                <Dots
+                  left="14%"
+                  top="85%"
+                  width="8%"
+                  height="5%"
+                  color="#cfd6e6"
+                  size={19}
+                  gapY={12}
+                  opacity={0.9}
+                />
 
                 <div
                   style={{
@@ -150,12 +209,16 @@ export default function WelcomeSplash() {
                 >
                   <span
                     className={sacramento.className}
-                    style={{ fontSize: "5.2cqw", color: "#5ec8d8", lineHeight: 1 }}
+                    style={{
+                      fontSize: "5.2cqw",
+                      color: "#5ec8d8",
+                      lineHeight: 1,
+                    }}
                   >
                     wilo
                   </span>
 
-                  {/* Logo aproximado en CSS — ver nota abajo para usar el real. */}
+                  {/* Logo aproximado en CSS */}
                   <div
                     style={{
                       position: "relative",
@@ -205,22 +268,53 @@ export default function WelcomeSplash() {
 
                 <div
                   className={oswald.className}
-                  style={{ position: "absolute", right: "5.5%", top: "20%", textAlign: "right" }}
+                  style={{
+                    position: "absolute",
+                    right: "5.5%",
+                    top: "20%",
+                    textAlign: "right",
+                  }}
                 >
-                  <p style={{ fontSize: "4.6cqw", color: "#dbe6f2", letterSpacing: "0.02em", margin: "0 0 2%" }}>
+                  <p
+                    style={{
+                      fontSize: "4.6cqw",
+                      color: "#dbe6f2",
+                      letterSpacing: "0.02em",
+                      margin: "0 0 2%",
+                    }}
+                  >
                     WILMER RESTREPO
                   </p>
-                  <p style={{ fontSize: "1.5cqw", color: "#cfe0ef", letterSpacing: "0.22em", margin: 0 }}>
+                  <p
+                    style={{
+                      fontSize: "1.5cqw",
+                      color: "#cfe0ef",
+                      letterSpacing: "0.22em",
+                      margin: 0,
+                    }}
+                  >
                     Ingeniero de Sistemas
                   </p>
-                  <p style={{ fontSize: "1.5cqw", color: "#cfe0ef", letterSpacing: "0.16em", margin: "1% 0 0" }}>
+                  <p
+                    style={{
+                      fontSize: "1.5cqw",
+                      color: "#cfe0ef",
+                      letterSpacing: "0.16em",
+                      margin: "1% 0 0",
+                    }}
+                  >
                     Especialista en desarrollo de software
                   </p>
                 </div>
 
                 <div
                   className={oswald.className}
-                  style={{ position: "absolute", right: "5.5%", bottom: "14%", textAlign: "right" }}
+                  style={{
+                    position: "absolute",
+                    right: "5.5%",
+                    bottom: "14%",
+                    textAlign: "right",
+                  }}
                 >
                   <a
                     href="tel:+573003553762"
@@ -251,7 +345,7 @@ export default function WelcomeSplash() {
                   </a>
 
                   <a
-                    href="https://www.wilolink.online"
+                    href="https://www.wilolink.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -263,7 +357,7 @@ export default function WelcomeSplash() {
                       textUnderlineOffset: 3,
                     }}
                   >
-                    www.wilolink.online
+                    www.wilolink.com
                   </a>
 
                   <a
@@ -286,9 +380,31 @@ export default function WelcomeSplash() {
 
               {/* ---------- REVERSO ---------- */}
               <div style={{ ...face, transform: "rotateY(180deg)" }}>
-                <Dots left="29%" top="1%" width="24%" height="12%" color="#6f7385" opacity={0.85} />
-                <Dots left="1%" top="58%" width="17%" height="28%" opacity={0.5} />
-                <Dots left="13%" top="86%" width="8%" height="5%" color="#cfd6e6" size={19} gapY={12} opacity={0.9} />
+                <Dots
+                  left="29%"
+                  top="1%"
+                  width="24%"
+                  height="12%"
+                  color="#6f7385"
+                  opacity={0.85}
+                />
+                <Dots
+                  left="1%"
+                  top="58%"
+                  width="17%"
+                  height="28%"
+                  opacity={0.5}
+                />
+                <Dots
+                  left="13%"
+                  top="86%"
+                  width="8%"
+                  height="5%"
+                  color="#cfd6e6"
+                  size={19}
+                  gapY={12}
+                  opacity={0.9}
+                />
 
                 <div
                   style={{
@@ -306,7 +422,8 @@ export default function WelcomeSplash() {
                     <div
                       key={s}
                       style={{
-                        background: "linear-gradient(90deg, #3D8FD6 0%, #3FC9B4 100%)",
+                        background:
+                          "linear-gradient(90deg, #3D8FD6 0%, #3FC9B4 100%)",
                         borderRadius: 999,
                         padding: "2.4% 5%",
                         textAlign: "center",
@@ -314,7 +431,12 @@ export default function WelcomeSplash() {
                     >
                       <p
                         className={montserrat.className}
-                        style={{ fontSize: "1.5cqw", color: "#ffffff", margin: 0, lineHeight: 1.35 }}
+                        style={{
+                          fontSize: "1.5cqw",
+                          color: "#ffffff",
+                          margin: 0,
+                          lineHeight: 1.35,
+                        }}
                       >
                         {s}
                       </p>
@@ -341,7 +463,13 @@ export default function WelcomeSplash() {
             </div>
           </motion.div>
 
-          <p style={{ color: "#9aa3c9", fontSize: "clamp(11px, 1vw, 13px)", margin: 0 }}>
+          <p
+            style={{
+              color: "#9aa3c9",
+              fontSize: "clamp(11px, 1vw, 13px)",
+              margin: 0,
+            }}
+          >
             Toca la tarjeta para voltearla
           </p>
 

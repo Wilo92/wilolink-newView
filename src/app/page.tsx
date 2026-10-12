@@ -9,10 +9,12 @@ import StatsAndProcess from "@/components/StatsAndProcess";
 import ContactInfo from "@/components/ContactInfo";
 import Projects from "@/components/Projects";
 import WhyUs from "@/components/Whyus";
+import WelcomeSplash from "@/components/WelcomeSplash";
 
 export default function Home() {
   return (
     <>
+      <WelcomeSplash />
       <Hero />
       <div className="h-16 bg-[#0a0e1a] md:h-25" />
 

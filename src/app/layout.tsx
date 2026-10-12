@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 import CustomCursor from "@/components/CustomCursor";
 import CircuitBackground from "@/components/CircuitBackground";
+import WelcomeSplash from "@/components/WelcomeSplash";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
