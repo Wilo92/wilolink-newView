@@ -3,12 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-alt" });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-alt",
+});
 
 const COMMANDS = [
   { prefix: "$ ", text: "whoami", pause: 500 },
-  { prefix: "", text: "full-stack developer · networking · IT support", pause: 700 },
+  {
+    prefix: "",
+    text: "full-stack developer · networking · IT support",
+    pause: 700,
+  },
   { prefix: "$ ", text: "./services --list", pause: 400 },
   { prefix: "› ", text: "web development ........ available", pause: 150 },
   { prefix: "› ", text: "IT training ............ available", pause: 150 },
@@ -26,7 +36,7 @@ type Node = {
 };
 
 const COLORS = ["#22d3b8", "#ffb020"];
-const SPACING = 75; // px entre nodos: menos densidad que antes, menos saturado
+const SPACING = 75;
 const CONNECT_DIST = 110;
 
 function buildNodes(w: number, h: number): Node[] {
@@ -40,7 +50,7 @@ function buildNodes(w: number, h: number): Node[] {
     for (let j = 0; j < rows; j++) {
       nodes.push({
         x: (i + 0.5) * cw + (Math.random() - 0.5) * cw * 0.6,
-        y: (j + 0.5) * ch + (Math.random() - 0.5) * ch * 0.6,
+        y: (j + 0.5) * ch + (Math.random() - 0.5) * cw * 0.6,
         vx: (Math.random() - 0.5) * 1.8,
         vy: (Math.random() - 0.5) * 1.8,
         c: COLORS[Math.floor(Math.random() * COLORS.length)],
@@ -57,7 +67,6 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     if (!canvas) return;
 
     const reduceMotion = false;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -89,14 +98,25 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       off.width = size;
       off.height = size;
       const octx = off.getContext("2d")!;
-      const g = octx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+      const g = octx.createRadialGradient(
+        radius,
+        radius,
+        0,
+        radius,
+        radius,
+        radius,
+      );
       g.addColorStop(0, color);
       g.addColorStop(1, "transparent");
       octx.fillStyle = g;
       octx.fillRect(0, 0, size, size);
       return off;
     }
-    const glowSprites: Record<string, { normal: HTMLCanvasElement; hover: HTMLCanvasElement }> = {};
+
+    const glowSprites: Record<
+      string,
+      { normal: HTMLCanvasElement; hover: HTMLCanvasElement }
+    > = {};
     COLORS.forEach((c) => {
       glowSprites[c] = {
         normal: makeGlowSprite(c, 3 * 4),
@@ -136,7 +156,7 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         isVisible = entry.isIntersecting;
         if (isVisible && !raf) draw();
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
     observer.observe(canvas);
 
@@ -188,14 +208,19 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         }
       }
 
-      const termPoint = { x: w * 0.82, y: h / 2 };
+      const isMobile = w < 500;
+      const termPoint = isMobile
+        ? { x: w * 0.5, y: h * 0.65 }
+        : { x: w * 0.82, y: h / 2 };
+
       const nearest = [...nodes]
         .sort(
           (a, b) =>
             Math.hypot(a.x - termPoint.x, a.y - termPoint.y) -
-            Math.hypot(b.x - termPoint.x, b.y - termPoint.y)
+            Math.hypot(b.x - termPoint.x, b.y - termPoint.y),
         )
         .slice(0, 4);
+
       nearest.forEach((n) => {
         const d = Math.hypot(n.x - termPoint.x, n.y - termPoint.y);
         ctx!.strokeStyle = `rgba(255,255,255,${Math.max(0.08, 0.4 - d / 900)})`;
@@ -207,10 +232,14 @@ function useMeshCanvas(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       });
 
       nodes.forEach((n) => {
-        const distToMouse = mouse.active ? Math.hypot(n.x - mouse.x, n.y - mouse.y) : Infinity;
+        const distToMouse = mouse.active
+          ? Math.hypot(n.x - mouse.x, n.y - mouse.y)
+          : Infinity;
         const nearMouse = distToMouse < MOUSE_RADIUS;
         const glowR = n.r * (nearMouse ? 7 : 4);
-        const sprite = nearMouse ? glowSprites[n.c].hover : glowSprites[n.c].normal;
+        const sprite = nearMouse
+          ? glowSprites[n.c].hover
+          : glowSprites[n.c].normal;
         ctx!.drawImage(sprite, n.x - glowR, n.y - glowR, glowR * 2, glowR * 2);
         ctx!.fillStyle = n.c;
         ctx!.beginPath();
@@ -262,7 +291,10 @@ function useTypingLoop() {
         for (const cmd of COMMANDS) {
           for (let i = 0; i <= cmd.text.length; i++) {
             if (cancelled) return;
-            setLines((prev) => [...prev.slice(0, -1), cmd.prefix + cmd.text.slice(0, i)]);
+            setLines((prev) => [
+              ...prev.slice(0, -1),
+              cmd.prefix + cmd.text.slice(0, i),
+            ]);
             await new Promise((r) => setTimeout(r, 20));
           }
           setLines((prev) => [...prev, ""]);
@@ -286,21 +318,23 @@ export default function Hero() {
   useMeshCanvas(canvasRef);
   const lines = useTypingLoop();
 
-
   return (
+    <section className="relative flex min-h-[calc(100svh-4rem)] w-full items-center justify-center overflow-hidden bg-[#0a0e1a] px-4 py-8 md:min-h-screen md:py-0">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full pointer-events-none md:pointer-events-auto"
+      />
 
-    <section className="relative min-h-[calc(100dvh-4rem)] md:h-screen overflow-hidden bg-[#0a0e1a]">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center gap-6 px-6 md:flex-row md:items-center md:justify-between md:gap-16 md:px-12">
-        <div className="max-w-md">
+      {/* Contenedor principal de dos columnas */}
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-8 text-center md:flex-row md:items-center md:justify-between md:gap-14 md:text-left">
+        {/* Columna Izquierda: Título y Botón */}
+        <div className="flex max-w-lg flex-col items-center md:items-start">
           <h1
             className="mb-5 text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-8xl"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             <span className="text-[#f4f2ec]">Wilo</span>
             <span className="text-[#b5501c]">Link</span>
-
           </h1>
 
           <p className="mb-7 text-lg text-[#9aa3c9] md:text-xl">
@@ -311,35 +345,45 @@ export default function Hero() {
             href="https://wa.me/573003553762"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-[#b5501c] px-5 py-3 text-base font-medium text-[#0a0e1a] transition hover:bg-[#7ff2df]"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#b5501c] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#b5501c]/25 transition hover:brightness-110 active:scale-95"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             iniciar proyecto →
           </a>
         </div>
 
-        <div className="w-full max-w-md md:max-w-xl rounded-xl border border-[#2a3355] bg-black p-4 font-mono text-[13px] text-[#9aa3c9] md:p-6 md:text-[18px]">
-          <div className="mb-2 flex gap-1.5">
+        {/* Columna Derecha: Terminal */}
+        {/* Consola / Terminal con altura fija y fondo negro sólido */}
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-xl h-[260px] md:h-[300px] flex flex-col rounded-xl border border-[#2a3355] bg-black p-4 !text-left shadow-2xl font-mono text-[11px] sm:text-[13px] md:text-[15px]">
+          {/* Botones de ventana */}
+          <div className="mb-3 flex shrink-0 items-center gap-1.5 border-b border-[#2a3355]/40 pb-2">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+            <span className="ml-2 text-[10px] text-[#4a5578] select-none">
+              bash
+            </span>
           </div>
 
-          <div className="h-[130px] overflow-hidden md:h-[250px]">
+          {/* Área de texto interna */}
+          <div className="flex-1 w-full overflow-hidden !text-left flex flex-col justify-start items-start">
             {lines.map((line, i) => (
-              <div key={i} className="min-h-[22px] whitespace-pre">
+              <div
+                key={i}
+                className="w-full min-h-[20px] text-left !text-left leading-relaxed text-[#9aa3c9] break-words"
+              >
                 {line.startsWith("$") ? (
-                  <span className="text-[#5eead4]">{line}</span>
+                  <span className="text-[#5eead4] font-medium">{line}</span>
                 ) : line.startsWith("›") ? (
                   <span>
-                    <span className="text-[#ffb020]">›</span>
+                    <span className="text-[#ffb020] mr-1">›</span>
                     {line.slice(1)}
                   </span>
                 ) : (
-                  line
+                  <span className="text-[#cbd5e1]">{line}</span>
                 )}
                 {i === lines.length - 1 && (
-                  <span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-[#5eead4]" />
+                  <span className="ml-1 inline-block h-3.5 w-1.5 align-middle animate-pulse bg-[#5eead4]" />
                 )}
               </div>
             ))}
@@ -348,9 +392,6 @@ export default function Hero() {
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_22%_50%,transparent_0%,rgba(10,14,26,0.55)_70%,rgba(10,14,26,0.85)_100%)]" />
-    </section >
-
-
-
+    </section>
   );
 }
